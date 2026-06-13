@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>도망간 가치 — 나를 바꾸는 사고 지도</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root{
+    --ink:#0a0e14;
+    --ink2:#11161f;
+    --panel:#161c27;
+    --line:#28303d;
+    --fog:#5a6678;
+    --mist:#8c97a8;
+    --paper:#dfe4ec;
+    --bright:#f2f5fa;
+    --amber:#e8a13c;
+    --amber-dim:#7a5a26;
+    --cyan:#4dd0c4;
+    --rose:#e0708a;
+    --violet:#9b8cff;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--ink);
+    color:var(--paper);
+    font-family:'IBM Plex Sans KR',sans-serif;
+    font-weight:300;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--amber);color:var(--ink)}
+
+  .wrap{max-width:920px;margin:0 auto;padding:0 28px}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    min-height:100vh;
+    display:flex;flex-direction:column;justify-content:center;
+    position:relative;
+    padding:80px 0;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;letter-spacing:.32em;text-transform:uppercase;
+    color:var(--amber);margin-bottom:32px;
+    opacity:0;animation:fade .9s .2s forwards;
+  }
+  .hero h1{
+    font-family:'Gowun Batang',serif;
+    font-weight:700;
+    font-size:clamp(38px,7vw,76px);
+    line-height:1.12;
+    letter-spacing:-.01em;
+    color:var(--bright);
+    margin-bottom:36px;
+  }
+  .hero h1 .ln{display:block;opacity:0;transform:translateY(18px);animation:rise .9s forwards}
+  .hero h1 .ln:nth-child(1){animation-delay:.35s}
+  .hero h1 .ln:nth-child(2){animation-delay:.5s}
+  .hero h1 .ln:nth-child(3){animation-delay:.65s}
+  .hero h1 em{font-style:normal;color:var(--amber);position:relative}
+  .lede{
+    font-size:clamp(16px,2.1vw,19px);
+    color:var(--mist);max-width:600px;font-weight:300;
+    opacity:0;animation:fade 1s .9s forwards;
+  }
+  .lede b{color:var(--paper);font-weight:500}
+  .scroll-cue{
+    position:absolute;bottom:38px;left:50%;transform:translateX(-50%);
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;
+    color:var(--fog);opacity:0;animation:fade 1s 1.4s forwards;
+    display:flex;flex-direction:column;align-items:center;gap:10px;
+  }
+  .scroll-cue .bar{width:1px;height:34px;background:linear-gradient(var(--fog),transparent);animation:drip 2s ease-in-out infinite}
+
+  /* ---------- THE THESIS LINE ---------- */
+  .thesis{
+    padding:120px 0;border-top:1px solid var(--line);
+    background:linear-gradient(180deg,var(--ink),var(--ink2));
+  }
+  .thesis .big{
+    font-family:'Gowun Batang',serif;
+    font-size:clamp(24px,4vw,40px);
+    line-height:1.5;color:var(--paper);font-weight:400;
+  }
+  .thesis .big strong{color:var(--amber);font-weight:700}
+  .thesis .sub{margin-top:28px;color:var(--fog);font-size:15px;font-family:'IBM Plex Mono',monospace;letter-spacing:.04em}
+
+  /* ---------- SECTION SCAFFOLD ---------- */
+  .sec{padding:90px 0;border-top:1px solid var(--line)}
+  .sec-tag{
+    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.18em;
+    color:var(--fog);text-transform:uppercase;margin-bottom:14px;display:block;
+  }
+  .sec h2{
+    font-family:'Gowun Batang',serif;font-weight:700;
+    font-size:clamp(26px,4vw,40px);color:var(--bright);
+    line-height:1.25;margin-bottom:18px;
+  }
+  .sec .intro{color:var(--mist);max-width:640px;margin-bottom:48px;font-size:16px}
+
+  /* ---------- INTERACTIVE: THE FOUR THREADS ---------- */
+  .threads{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+  @media(max-width:680px){.threads{grid-template-columns:repeat(2,1fr)}}
+  .thread{
+    background:var(--panel);border:1px solid var(--line);border-radius:3px;
+    padding:20px 18px;cursor:pointer;position:relative;
+    transition:.35s cubic-bezier(.2,.8,.2,1);overflow:hidden;
+  }
+  .thread:hover{border-color:var(--amber-dim);transform:translateY(-3px)}
+  .thread.on{border-color:var(--amber);background:#1b2230}
+  .thread .num{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--amber);letter-spacing:.1em}
+  .thread .q{font-size:14px;color:var(--paper);margin-top:10px;font-weight:400;line-height:1.5}
+  .thread::after{content:'';position:absolute;left:0;bottom:0;height:2px;width:0;background:var(--amber);transition:.4s}
+  .thread.on::after{width:100%}
+
+  .panel-out{
+    background:linear-gradient(180deg,#141a24,#10151d);
+    border:1px solid var(--line);border-left:2px solid var(--amber);
+    border-radius:3px;padding:30px 32px;min-height:160px;
+    transition:.3s;
+  }
+  .panel-out .label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.15em;color:var(--amber);text-transform:uppercase}
+  .panel-out h3{font-family:'Gowun Batang',serif;font-size:22px;color:var(--bright);margin:10px 0 14px;font-weight:700}
+  .panel-out p{color:var(--mist);font-size:15.5px;line-height:1.75}
+  .panel-out p b{color:var(--paper);font-weight:500}
+  .panel-out .you{margin-top:16px;padding-top:16px;border-top:1px dashed var(--line);font-size:13.5px;color:var(--fog);font-style:italic}
+  .panel-out .you span{color:var(--rose);font-style:normal}
+
+  /* ---------- THE SPINE (vertical synthesis) ---------- */
+  .spine{position:relative;padding-left:0}
+  .node{
+    display:grid;grid-template-columns:64px 1fr;gap:24px;
+    padding:26px 0;position:relative;
+  }
+  .node:not(:last-child)::before{
+    content:'';position:absolute;left:31px;top:54px;bottom:-26px;width:1px;
+    background:linear-gradient(var(--amber-dim),var(--line));
+  }
+  .node .dot{
+    width:64px;height:64px;border-radius:50%;
+    border:1px solid var(--line);background:var(--panel);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'IBM Plex Mono',monospace;font-size:18px;color:var(--amber);
+    position:relative;z-index:2;
+  }
+  .node .body h4{font-size:17px;color:var(--bright);font-weight:600;margin-bottom:6px}
+  .node .body h4 small{font-family:'IBM Plex Mono',monospace;font-weight:400;color:var(--fog);font-size:12px;margin-left:8px;letter-spacing:.05em}
+  .node .body p{color:var(--mist);font-size:15px}
+  .node .body p strong{color:var(--amber);font-weight:600}
+
+  /* ---------- THE LOOP (the daily engine) ---------- */
+  .loop-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  @media(max-width:760px){.loop-grid{grid-template-columns:1fr 1fr}}
+  .step{
+    background:var(--panel);border:1px solid var(--line);border-radius:3px;
+    padding:22px 18px;position:relative;transition:.3s;
+  }
+  .step:hover{background:#1a2230;border-color:var(--cyan)}
+  .step .n{font-family:'IBM Plex Mono',monospace;color:var(--cyan);font-size:13px;letter-spacing:.1em}
+  .step h5{font-size:15px;color:var(--bright);margin:10px 0 8px;font-weight:600}
+  .step p{font-size:13.5px;color:var(--fog);line-height:1.6}
+  .loop-warn{
+    margin-top:20px;padding:18px 22px;border:1px solid var(--amber-dim);
+    border-radius:3px;background:rgba(232,161,60,.05);
+    font-size:14.5px;color:var(--paper);
+  }
+  .loop-warn b{color:var(--amber)}
+
+  /* ---------- MUSK STRATEGY ---------- */
+  .musk{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
+  @media(max-width:680px){.musk{grid-template-columns:1fr}}
+  .musk .card{background:var(--panel);border:1px solid var(--line);border-radius:3px;padding:26px}
+  .musk .card .k{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;margin-bottom:12px}
+  .musk .card.disc .k{color:var(--rose)}
+  .musk .card.keep .k{color:var(--cyan)}
+  .musk .card h4{font-family:'Gowun Batang',serif;font-size:19px;color:var(--bright);margin-bottom:10px}
+  .musk .card p{font-size:14.5px;color:var(--mist)}
+  .musk .chain{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--fog);margin-top:14px;letter-spacing:.02em}
+  .musk .chain s{color:var(--rose);opacity:.7}
+
+  /* ---------- ACTION ---------- */
+  .action{
+    background:linear-gradient(135deg,#1c1408,#10151d);
+    border:1px solid var(--amber-dim);border-radius:4px;
+    padding:44px 40px;margin-top:10px;
+  }
+  .action .tag{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;color:var(--amber);text-transform:uppercase}
+  .action h3{font-family:'Gowun Batang',serif;font-size:clamp(22px,3.4vw,30px);color:var(--bright);margin:14px 0 18px;font-weight:700;line-height:1.4}
+  .action p{color:var(--mist);font-size:15.5px;max-width:620px}
+  .action .demo{
+    margin-top:24px;background:var(--ink);border:1px solid var(--line);border-radius:3px;
+    padding:20px 22px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--fog);
+    line-height:1.9;
+  }
+  .action .demo .c{color:var(--amber)}
+  .action .demo .u{color:var(--cyan)}
+
+  /* ---------- SETUP CHECKLIST (interactive) ---------- */
+  .check{list-style:none;margin-top:8px}
+  .check li{
+    display:flex;align-items:flex-start;gap:14px;
+    padding:16px 18px;border:1px solid var(--line);border-radius:3px;
+    margin-bottom:10px;cursor:pointer;transition:.25s;background:var(--panel);
+  }
+  .check li:hover{border-color:var(--cyan)}
+  .check li.done{opacity:.5;border-color:var(--cyan)}
+  .check li.done .txt{text-decoration:line-through}
+  .box{
+    flex-shrink:0;width:20px;height:20px;border:1px solid var(--fog);border-radius:3px;
+    margin-top:2px;display:flex;align-items:center;justify-content:center;transition:.25s;
+    font-size:12px;color:var(--ink);
+  }
+  .check li.done .box{background:var(--cyan);border-color:var(--cyan)}
+  .check .txt{font-size:15px;color:var(--paper)}
+  .check .txt small{display:block;color:var(--fog);font-size:13px;margin-top:3px}
+  .progress{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--cyan);margin-bottom:18px;letter-spacing:.05em}
+
+  /* ---------- CLOSING ---------- */
+  .close{padding:110px 0 90px;border-top:1px solid var(--line);text-align:center}
+  .close .mark{font-family:'IBM Plex Mono',monospace;color:var(--amber);font-size:13px;letter-spacing:.3em;margin-bottom:26px}
+  .close p{font-family:'Gowun Batang',serif;font-size:clamp(20px,3vw,28px);line-height:1.6;color:var(--paper);max-width:680px;margin:0 auto;font-weight:400}
+  .close p em{color:var(--amber);font-style:normal}
+  .foot{margin-top:60px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--fog);letter-spacing:.08em}
+
+  /* reveal on scroll */
+  .reveal{opacity:0;transform:translateY(24px);transition:.7s cubic-bezier(.2,.8,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+
+  @keyframes fade{to{opacity:1}}
+  @keyframes rise{to{opacity:1;transform:none}}
+  @keyframes drip{0%,100%{opacity:.3;transform:scaleY(.6)}50%{opacity:1;transform:scaleY(1)}}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero wrap">
+  <span class="eyebrow">AI 시대의 사고 지도 · 대화 정리본</span>
+  <h1>
+    <span class="ln">실행이 공짜가 되면,</span>
+    <span class="ln">가치는 어디로 <em>도망</em>가는가</span>
+    <span class="ln">— 그리고 나는 거기 있는가</span>
+  </h1>
+  <p class="lede">네가 던진 건 4개의 질문이었지만, 그 밑엔 하나의 질문이 흐르고 있었어. <b>"AI가 누구나 실행하게 만든 시대에, 나는 무엇이 되어야 하나."</b> 이 페이지는 우리가 함께 그 답을 줄로 꿰어간 기록이야.</p>
+  <div class="scroll-cue"><span>SCROLL</span><span class="bar"></span></div>
+</header>
+
+<!-- THESIS -->
+<section class="thesis">
+  <div class="wrap reveal">
+    <p class="big">AI가 실행을 0원에 가깝게 만들면,<br>가치는 실행에서 그 <strong>위(판단)</strong>와 <strong>아래(현실 접점)</strong>와 <strong>옆(취향·소유감)</strong>으로 도망간다.</p>
+    <p class="sub">// 너의 4개 질문은 사실, 이 도망간 가치를 각각 다른 각도에서 더듬고 있었다.</p>
+  </div>
+</section>
+
+<!-- THE FOUR THREADS (interactive) -->
+<section class="sec wrap">
+  <span class="sec-tag reveal">01 — 네 개의 질문, 하나의 줄기</span>
+  <h2 class="reveal">흩어진 질문을 눌러봐</h2>
+  <p class="intro reveal">처음엔 두서없어 보였지만, 네 질문은 1→2→3→4로 이어지는 사다리였어. 각 카드를 눌러서 그 질문이 실제로 가리키던 게 뭐였는지 봐.</p>
+
+  <div class="threads reveal">
+    <div class="thread on" data-k="q1">
+      <span class="num">Q1</span>
+      <p class="q">AI를 어떻게 잘 활용하나</p>
+    </div>
+    <div class="thread" data-k="q2">
+      <span class="num">Q2</span>
+      <p class="q">만든 걸 어떻게 수익·가치로</p>
+    </div>
+    <div class="thread" data-k="q3">
+      <span class="num">Q3</span>
+      <p class="q">사람이 해야 할 일은 뭔가</p>
+    </div>
+    <div class="thread" data-k="q4">
+      <span class="num">Q4</span>
+      <p class="q">결국 중요한 능력은</p>
+    </div>
+  </div>
+
+  <div class="panel-out reveal" id="threadOut"></div>
+</section>
+
+<!-- THE SPINE -->
+<section class="sec wrap">
+  <span class="sec-tag reveal">02 — 줄로 꿰면 이렇게 된다</span>
+  <h2 class="reveal">하나의 사고 체계</h2>
+  <p class="intro reveal">네 질문의 답은 따로 놀지 않았어. 아래로 읽으면 한 줄로 이어져 — 사람 몫에서 출발해 수익, 능력, 기르는 법, 그리고 너의 전략까지.</p>
+
+  <div class="spine reveal">
+    <div class="node">
+      <div class="dot">人</div>
+      <div class="body">
+        <h4>사람 몫 <small>Q3</small></h4>
+        <p>실행이 아니라 <strong>선택하고 거기에 이름을 거는 것.</strong> AI는 선택지를 무한히 만들지만, 무엇을 고를지·왜 옳은지·틀리면 누가 책임지는지는 못 진다.</p>
+      </div>
+    </div>
+    <div class="node">
+      <div class="dot">₩</div>
+      <div class="body">
+        <h4>수익 <small>Q2</small></h4>
+        <p>돈은 "선택의 총합"인 <strong>관점·편향</strong>에 붙는다. 평균은 무한해서 0원, 한 사람의 치우친 시선은 희소해서 값이 매겨진다. 네 소설·SaaS가 안 팔린 건 거기 "고른 사람"이 없어서였다.</p>
+      </div>
+    </div>
+    <div class="node">
+      <div class="dot">★</div>
+      <div class="body">
+        <h4>중요한 능력 <small>Q4</small></h4>
+        <p>AI를 시키는 법이 아니라, 무한한 선택지 앞에서 <strong>"이거다" 하는 안목 + 이름 걸 배짱.</strong> 안목은 도메인에서 깨지며 생기고, 배짱은 책임져봐야 생긴다.</p>
+      </div>
+    </div>
+    <div class="node">
+      <div class="dot">↻</div>
+      <div class="body">
+        <h4>기르는 법 <small>Q1의 진짜 답</small></h4>
+        <p>직관 루프(예측→반박→틈 언어화)를 누적 그릇에 쌓기. AI를 정답지가 아니라 <strong>스파링 상대</strong>로 쓴다.</p>
+      </div>
+    </div>
+    <div class="node">
+      <div class="dot">→</div>
+      <div class="body">
+        <h4>너의 전략 <small>머스크 모델</small></h4>
+        <p>도메인은 갈아타도 <strong>"낯선 분야에 들어가 빨리 정복하는 능력"은 누적</strong>된다. 첫 훈련장은 우울증 스타트업, 완주가 1순위.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THE LOOP -->
+<section class="sec wrap">
+  <span class="sec-tag reveal">03 — 매일 돌리는 엔진</span>
+  <h2 class="reveal">직관 루프</h2>
+  <p class="intro reveal">직관은 <b>예측 → 틀림 → 틈을 통한 학습</b>의 반복에서 생긴다. 핵심은 "틀림"이 아니라 <b>예측을 먼저 했다는 것.</b> AI가 정답을 0초에 주면 틀려볼 기회가 사라지고 직관도 안 자란다. 그래서 순서를 뒤집는다.</p>
+
+  <div class="loop-grid reveal">
+    <div class="step">
+      <span class="n">01</span>
+      <h5>예측 먼저</h5>
+      <p>묻기 전에 내 가설을 적는다. 어설퍼도 적는 순간 틀릴 준비가 된다.</p>
+    </div>
+    <div class="step">
+      <span class="n">02</span>
+      <h5>AI를 반대편에</h5>
+      <p>"내 가설을 반박해라. 베테랑이라면 비웃을 지점을 찾아라."</p>
+    </div>
+    <div class="step">
+      <span class="n">03</span>
+      <h5>틈을 언어화</h5>
+      <p>내 예측과 AI 반박 사이의 틈을 한 줄로. "내가 틀린 지점은 여기다."</p>
+    </div>
+    <div class="step">
+      <span class="n">04</span>
+      <h5>다음엔 미리 메우고</h5>
+      <p>반복하면 내 예측이 AI의 반박을 미리 품는다. 그게 직관이 자란 것.</p>
+    </div>
+  </div>
+
+  <div class="loop-warn reveal">⚠ <b>1번을 건너뛰면 압축이 아니라 정답 베끼기다.</b> 직관은 0. 이 루프의 성패는 도구가 아니라 "AI한테 묻기 전에 내 예측을 먼저 적는 1초의 습관"에 달려 있다.</div>
+</section>
+
+<!-- MUSK -->
+<section class="sec wrap">
+  <span class="sec-tag reveal">04 — 머스크 모델</span>
+  <h2 class="reveal">버릴 것과 누적할 것</h2>
+  <p class="intro reveal">머스크의 핵심은 "여러 회사"가 아니라 <b>매번 도메인을 0에서 갈아탄 것.</b> 그럼 따라다닌 건 뭐였나 — 그게 너의 자산이 될 것과 같다.</p>
+
+  <div class="musk reveal">
+    <div class="card disc">
+      <span class="k">갈아타도 되는 것</span>
+      <h4>도메인 지식</h4>
+      <p>매번 0에서 시작해도 되는 소모품. 결제도, 자동차도, 로켓도 처음엔 문외한이었다.</p>
+      <p class="chain"><s>결제 → 자동차 → 로켓 → SNS</s></p>
+    </div>
+    <div class="card keep">
+      <span class="k">누적되는 것</span>
+      <h4>고르는 방식</h4>
+      <p>제1원리로 전제를 부수고, 베팅하고, 자기 전부를 거는 메타 능력. 도메인을 갈아타도 살아남는 진짜 자산.</p>
+      <p class="chain">정복 사이클 ↻ 매번 더 빨라진다</p>
+    </div>
+  </div>
+
+  <div class="loop-warn reveal" style="border-color:var(--rose);background:rgba(224,112,138,.05)">⚠ <b style="color:var(--rose)">함정:</b> 갈아타기 전략은 "어디에도 깊이 몰입 않고 떠도는 것"으로 변질되기 쉽다. 정복자는 떠돌이와 다르다 — <b style="color:var(--rose)">한 번에 하나는 끝까지 정복하고 떠난다.</b> 그래서 "완주가 1순위, 나머지는 병렬"이 아니라 "메인 훈련장 + 사이드 실험장"의 주종 관계로 본다.</div>
+</section>
+
+<!-- ACTION -->
+<section class="sec wrap">
+  <span class="sec-tag reveal">05 — 오늘 할 것</span>
+  <h2 class="reveal">추상을 행동 하나로 못 박기</h2>
+  <div class="action reveal">
+    <span class="tag">This week</span>
+    <h3>"실행이 아니라 선택"인 결정 하나를<br>직접 내리고, 이름을 걸어라.</h3>
+    <p>메인 훈련장(우울증)에서, AI에게 먼저 묻지 말고 <b>네가 먼저 고른다.</b> 그 다음 Project에서 AI한테 반박받아 로그에 남긴다. 그게 이 페이지 전체를 행동으로 바꾸는 첫 걸음.</p>
+    <div class="demo">
+<span class="u">너</span> "우리 앱은 리텐션을 좇지 않고 위기 신호 감지에 집중한다.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;나는 그렇게 가야 한다고 본다. 내 예측은 ___ 다."<br>
+<span class="c">Claude</span> (1) 약한 고리 → (2) 네가 놓친 것 → (3) 오류 패턴 → (4) 로그 한 줄
+    </div>
+  </div>
+</section>
+
+<!-- SETUP CHECKLIST -->
+<section class="sec wrap">
+  <span class="sec-tag reveal">06 — 셋업 체크리스트</span>
+  <h2 class="reveal">직관 스파링 Project</h2>
+  <p class="intro reveal">눌러서 완료 표시. 도구는 더 늘리지 않는다 — 늘리면 안 지켜진다.</p>
+  <p class="progress reveal" id="prog">0 / 4 완료</p>
+  <ul class="check reveal" id="checklist">
+    <li data-i="1"><span class="box">✓</span><span class="txt">Project 생성 <small>claude.ai/projects → "+ New Project" → 이름 "직관 스파링"</small></span></li>
+    <li data-i="2"><span class="box">✓</span><span class="txt">지침 붙여넣기 <small>"Set project instructions"에 스파링 프롬프트 (대화에서 받은 것)</small></span></li>
+    <li data-i="3"><span class="box">✓</span><span class="txt">사고오류 로그 업로드 <small>project knowledge "+" → 받은 .md 파일 올리기</small></span></li>
+    <li data-i="4"><span class="box">✓</span><span class="txt">첫 바퀴 돌리기 <small>오늘 한 판단 하나를 예측 형식으로 던지고 반박받기</small></span></li>
+  </ul>
+</section>
+
+<!-- CLOSING -->
+<section class="close wrap">
+  <div class="reveal">
+    <p class="mark">— 한 문장으로 —</p>
+    <p>AI가 실행을 공짜로 만든 시대에 사람에게 남는 유일하게 비싼 일은 <em>"무한한 선택지 앞에서 고르고, 그 선택에 이름을 거는 것"</em>이다.<br>네 '정감 안 감'은 그걸 AI에 넘겨 생긴 공백이고, 네 '안 팔림'은 시장이 그 공백을 정확히 읽은 결과다.</p>
+    <p class="foot">이 지도의 다섯 조각은 이미 네 안에 있던 직감이었다 · 나는 줄로 꿰었을 뿐</p>
+  </div>
+</section>
+
+<script>
+  // ---- thread panel data ----
+  const data = {
+    q1:{label:'Q1 · AI 활용',h:'사실은: "AI가 못 하는 경계를 어떻게 찾나"',
+      p:'표면은 "AI를 잘 쓰는 법"이지만, 너는 곧 <b>"물고기 말고 잡는 법"</b>을 원한다고 교정했다. 진짜 질문은 입력 기술이 아니라 — 같은 AI한테 물어도 주니어·시니어·CTO·머스크가 다른 답을 얻는 이유, 즉 <b>질문 이전에 머릿속에 무엇이 있나</b>였다.',
+      you:'네 단서: <span>"알림은 쉬운데, 환자에게 전화는 못 하잖아"</span> — 경계를 정확히 짚은 직감.'},
+    q2:{label:'Q2 · 수익화',h:'사실은: "도망간 가치가 어디 있나"',
+      p:'"만드는 건 공짜가 됐는데 아무도 안 본다." 소설이 안 읽힌 건 글이 나빠서가 아니라 <b>세상에 글이 무한해졌기 때문.</b> 안 팔린 부분은 전부 생산 <b>바깥</b>(관점·유통·신뢰·관계)이었다. 네 좌절은 도망간 가치가 어디 있는지 정확히 가리키는 신호였다.',
+      you:'네 단서: <span>"내가 만든 게 아니니 정감이 안 간다"</span> — 소유권 공백의 자가진단.'},
+    q3:{label:'Q3 · 사람 몫',h:'사실은: Q2의 답과 한 몸',
+      p:'AI가 생산을 공짜로 만들면 가치는 생산 바깥으로 도망가고, 그 자리가 곧 <b>"사람만 할 수 있는 일"</b>이자 <b>"돈이 나는 자리"</b>다. 사람 몫 = 실행이 아니라 <b>선택에 자기 이름을 거는 일.</b> 의사가 AI 진단을 받아도 최종 서명은 의사인 것처럼.',
+      you:'연결: Q3을 풀면 Q2가 자동으로 풀린다. 같은 동전의 양면.'},
+    q4:{label:'Q4 · 중요한 능력',h:'사실은: 모든 질문이 모이는 점',
+      p:'중요한 건 "AI를 시키는 능력"이 아니다 — 그건 누구나 한다. 무한한 선택지 앞에서 <b>고를 수 있는 안목</b>과 그 선택에 <b>이름을 걸 배짱.</b> 그리고 질문의 질을 결정하는 건 프롬프트 기술이 아니라 <b>그 도메인에서 얼마나 깨져봤느냐.</b> AI는 경험을 증폭하지, 없는 경험을 만들지 못한다.',
+      you:'네 욕망: <span>"chief의 입장 / 머스크처럼 길을 안 정한 것"</span> — 선택하고 책임지는 자리.'}
+  };
+  const out = document.getElementById('threadOut');
+  function render(k){
+    const d = data[k];
+    out.innerHTML = `<span class="label">${d.label}</span><h3>${d.h}</h3><p>${d.p}</p><p class="you">${d.you}</p>`;
+  }
+  render('q1');
+  document.querySelectorAll('.thread').forEach(t=>{
+    t.addEventListener('click',()=>{
+      document.querySelectorAll('.thread').forEach(x=>x.classList.remove('on'));
+      t.classList.add('on');
+      render(t.dataset.k);
+    });
+  });
+
+  // ---- checklist ----
+  const items = document.querySelectorAll('#checklist li');
+  const prog = document.getElementById('prog');
+  function upd(){
+    const done = document.querySelectorAll('#checklist li.done').length;
+    prog.textContent = `${done} / 4 완료`;
+    if(done===4) prog.textContent = '4 / 4 완료 — 셋업 끝. 이제 매일 한 바퀴.';
+  }
+  items.forEach(li=>li.addEventListener('click',()=>{li.classList.toggle('done');upd();}));
+
+  // ---- scroll reveal ----
+  const io = new IntersectionObserver((es)=>{
+    es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});
+  },{threshold:.14});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
