@@ -2,7 +2,7 @@
 
 claude와 나눈 대화를 정리한 공간. HTML로 만들어진 노트들을 한 곳에서 보고 공유한다.
 
-🔗 **[노트 허브 열기](https://eunseong.github.io/notes-html/)** ← GitHub Pages 배포 후 이 링크로 접근
+🔗 **[노트 허브 열기](https://silvermaking.github.io/notes-html/)** ← GitHub Pages 배포 후 이 링크로 접근
 
 ---
 
