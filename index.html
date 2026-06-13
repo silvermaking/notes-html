@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>notes — claude와 나눈 대화들</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root {
+    --ink: #0a0e14;
+    --ink2: #11161f;
+    --panel: #161c27;
+    --panel2: #1c2333;
+    --line: #28303d;
+    --fog: #5a6678;
+    --mist: #8c97a8;
+    --paper: #dfe4ec;
+    --bright: #f2f5fa;
+    --amber: #e8a13c;
+    --amber-dim: #7a5a26;
+    --cyan: #4dd0c4;
+    --rose: #e0708a;
+    --violet: #9b8cff;
+    --green: #5ccc8a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'IBM Plex Sans KR', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--amber); color: var(--ink); }
+
+  /* ── LAYOUT ── */
+  .wrap { max-width: 960px; margin: 0 auto; padding: 0 28px; }
+
+  /* ── HEADER ── */
+  header {
+    border-bottom: 1px solid var(--line);
+    padding: 28px 0;
+    position: sticky;
+    top: 0;
+    background: rgba(10, 14, 20, 0.92);
+    backdrop-filter: blur(12px);
+    z-index: 100;
+  }
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .logo {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px;
+    letter-spacing: .2em;
+    color: var(--amber);
+    text-decoration: none;
+  }
+  .logo span { color: var(--fog); }
+  .header-meta {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--fog);
+    letter-spacing: .1em;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 80px 0 56px;
+    border-bottom: 1px solid var(--line);
+  }
+  .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: .32em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fade .8s .1s forwards;
+  }
+  .hero h1 {
+    font-family: 'Gowun Batang', serif;
+    font-weight: 700;
+    font-size: clamp(32px, 5vw, 58px);
+    line-height: 1.15;
+    color: var(--bright);
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: rise .9s .2s forwards;
+  }
+  .hero-sub {
+    color: var(--mist);
+    font-size: 15px;
+    max-width: 520px;
+    font-weight: 300;
+    opacity: 0;
+    animation: fade .9s .5s forwards;
+  }
+  .hero-sub b { color: var(--paper); font-weight: 500; }
+
+  /* ── CONTROLS ── */
+  .controls {
+    padding: 28px 0 20px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    opacity: 0;
+    animation: fade .8s .6s forwards;
+  }
+  .filter-btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--fog);
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .filter-btn:hover, .filter-btn.active {
+    border-color: var(--amber);
+    color: var(--amber);
+    background: rgba(232,161,60,.06);
+  }
+  .count-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--fog);
+    margin-left: auto;
+  }
+
+  /* ── GRID ── */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    padding: 8px 0 60px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 24px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: border-color .2s, transform .2s, box-shadow .2s;
+    cursor: pointer;
+    opacity: 0;
+    animation: cardIn .5s forwards;
+  }
+  .card:hover {
+    border-color: var(--amber);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0,0,0,.4);
+  }
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .card-category {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--amber);
+  }
+  .meaningful-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--green);
+    flex-shrink: 0;
+    margin-top: 4px;
+    box-shadow: 0 0 6px var(--green);
+    title: "의미 있는 채팅";
+  }
+  .card h2 {
+    font-family: 'Gowun Batang', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--bright);
+    line-height: 1.35;
+  }
+  .card-desc {
+    font-size: 13px;
+    color: var(--mist);
+    line-height: 1.65;
+    flex: 1;
+  }
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+  }
+  .card-date {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--fog);
+  }
+  .tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    padding: 2px 8px;
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    color: var(--fog);
+  }
+  .card-note {
+    font-size: 12px;
+    color: var(--fog);
+    font-style: italic;
+    border-left: 2px solid var(--amber-dim);
+    padding-left: 10px;
+  }
+
+  /* ── EMPTY ── */
+  .empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--fog);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+  }
+
+  /* ── HOW TO ADD ── */
+  .howto {
+    border-top: 1px solid var(--line);
+    padding: 48px 0;
+  }
+  .howto h3 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 20px;
+  }
+  .howto-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+  }
+  .step {
+    background: var(--panel2);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 18px;
+  }
+  .step-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--amber);
+    margin-bottom: 8px;
+  }
+  .step p {
+    font-size: 13px;
+    color: var(--mist);
+    line-height: 1.6;
+  }
+  .step code {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--cyan);
+    background: var(--ink2);
+    padding: 2px 5px;
+    border-radius: 2px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 28px 0;
+    text-align: center;
+  }
+  footer p {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--fog);
+    letter-spacing: .1em;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes cardIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .grid { grid-template-columns: 1fr; }
+    .header-meta { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap header-inner">
+    <a href="." class="logo">notes<span>/</span></a>
+    <div class="header-meta" id="headerMeta">—</div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <div class="eyebrow">claude × notes</div>
+    <h1>대화에서 건진 것들</h1>
+    <p class="hero-sub">
+      claude와 나눈 채팅을 정리한 공간.<br>
+      <b>무엇을 생각했고, 무엇을 발견했는지.</b>
+    </p>
+  </section>
+
+  <div class="controls">
+    <button class="filter-btn active" data-filter="all">전체</button>
+    <button class="filter-btn" data-filter="meaningful">의미있는 것만</button>
+    <div id="categoryFilters"></div>
+    <span class="count-badge" id="countBadge"></span>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <section class="howto">
+    <h3>노트 추가하는 법</h3>
+    <div class="howto-steps">
+      <div class="step">
+        <div class="step-num">01 — HTML 추가</div>
+        <p>Claude가 생성한 HTML 파일을 이 레포에 넣는다.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02 — notes.json 수정</div>
+        <p><code>notes.json</code>에 항목 하나 추가. <code>file</code>, <code>title</code>, <code>date</code>, <code>category</code>, <code>description</code> 정도면 충분.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03 — push</div>
+        <p>git commit & push 하면 GitHub Pages가 자동으로 배포.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">04 — 공유</div>
+        <p>이 페이지 URL 하나만 공유하면 됨. 개별 노트 링크도 직접 공유 가능.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>generated with claude · hosted on github pages</p>
+  </div>
+</footer>
+
+<script>
+  async function load() {
+    let notes = [];
+    try {
+      const res = await fetch('./notes.json');
+      notes = await res.json();
+    } catch(e) {
+      document.getElementById('grid').innerHTML = '<div class="empty">notes.json을 불러올 수 없습니다.</div>';
+      return;
+    }
+
+    // sort by date desc
+    notes.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    // header meta
+    document.getElementById('headerMeta').textContent =
+      `${notes.length} notes · ${new Date().getFullYear()}`;
+
+    // collect categories
+    const cats = [...new Set(notes.map(n => n.category).filter(Boolean))];
+    const catFilters = document.getElementById('categoryFilters');
+    cats.forEach(cat => {
+      const btn = document.createElement('button');
+      btn.className = 'filter-btn';
+      btn.dataset.filter = cat;
+      btn.textContent = cat;
+      catFilters.appendChild(btn);
+    });
+
+    // filter logic
+    let currentFilter = 'all';
+    const grid = document.getElementById('grid');
+    const countBadge = document.getElementById('countBadge');
+
+    function render(filter) {
+      currentFilter = filter;
+      document.querySelectorAll('.filter-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.filter === filter);
+      });
+      let visible = notes;
+      if (filter === 'meaningful') visible = notes.filter(n => n.meaningful);
+      else if (filter !== 'all') visible = notes.filter(n => n.category === filter);
+
+      countBadge.textContent = `${visible.length} / ${notes.length}`;
+
+      grid.innerHTML = '';
+      if (!visible.length) {
+        grid.innerHTML = '<div class="empty">해당하는 노트가 없습니다.</div>';
+        return;
+      }
+
+      visible.forEach((n, i) => {
+        const card = document.createElement('a');
+        card.className = 'card';
+        card.href = n.file;
+        card.style.animationDelay = `${i * 0.05}s`;
+
+        const tags = (n.tags || []).slice(0, 3).map(t => `<span class="tag">${t}</span>`).join('');
+        const dot = n.meaningful ? '<div class="meaningful-dot" title="의미 있는 채팅"></div>' : '';
+        const noteEl = n.note ? `<div class="card-note">${n.note}</div>` : '';
+
+        card.innerHTML = `
+          <div class="card-top">
+            <div class="card-category">${n.category || '미분류'}</div>
+            ${dot}
+          </div>
+          <h2>${n.title}</h2>
+          <div class="card-desc">${n.description || ''}</div>
+          ${noteEl}
+          <div class="card-footer">
+            <div class="card-date">${n.date}</div>
+            <div class="tags">${tags}</div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    document.addEventListener('click', e => {
+      const btn = e.target.closest('.filter-btn');
+      if (btn) render(btn.dataset.filter);
+    });
+
+    render('all');
+  }
+
+  load();
+</script>
+</body>
+</html>
