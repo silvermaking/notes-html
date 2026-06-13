@@ -249,49 +249,58 @@
     font-size: 13px;
   }
 
-  /* ── HOW TO ADD ── */
-  .howto {
+  /* ── REPO CTA ── */
+  .repo-cta {
     border-top: 1px solid var(--line);
     padding: 48px 0;
   }
-  .howto h3 {
+  .repo-inner {
+    background: var(--panel2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 28px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .repo-text h3 {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 11px;
     letter-spacing: .25em;
     text-transform: uppercase;
     color: var(--amber);
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   }
-  .howto-steps {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 16px;
-  }
-  .step {
-    background: var(--panel2);
-    border: 1px solid var(--line);
-    border-radius: 6px;
-    padding: 18px;
-  }
-  .step-num {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    color: var(--amber);
-    margin-bottom: 8px;
-  }
-  .step p {
-    font-size: 13px;
+  .repo-text p {
+    font-size: 14px;
     color: var(--mist);
-    line-height: 1.6;
+    line-height: 1.65;
+    max-width: 460px;
   }
-  .step code {
+  .repo-link {
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    color: var(--cyan);
-    background: var(--ink2);
-    padding: 2px 5px;
-    border-radius: 2px;
+    font-size: 13px;
+    letter-spacing: .03em;
+    color: var(--paper);
+    text-decoration: none;
+    border: 1px solid var(--line);
+    background: var(--ink);
+    padding: 12px 18px;
+    border-radius: 5px;
+    white-space: nowrap;
+    transition: all .2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
   }
+  .repo-link:hover {
+    border-color: var(--amber);
+    color: var(--amber);
+    transform: translateY(-2px);
+  }
+  .repo-ico { color: var(--amber); }
 
   /* ── FOOTER ── */
   footer {
@@ -346,25 +355,15 @@
 
   <div class="grid" id="grid"></div>
 
-  <section class="howto">
-    <h3>노트 추가하는 법</h3>
-    <div class="howto-steps">
-      <div class="step">
-        <div class="step-num">01 — HTML 추가</div>
-        <p>Claude가 생성한 HTML 파일을 이 레포에 넣는다.</p>
+  <section class="repo-cta">
+    <div class="repo-inner">
+      <div class="repo-text">
+        <h3>소스 · 노트 관리</h3>
+        <p>이 허브와 모든 노트는 GitHub 저장소에서 관리됩니다. 새 노트 추가, 구조, 배포 방법은 저장소에서 확인하세요.</p>
       </div>
-      <div class="step">
-        <div class="step-num">02 — notes.json 수정</div>
-        <p><code>notes.json</code>에 항목 하나 추가. <code>file</code>, <code>title</code>, <code>date</code>, <code>category</code>, <code>description</code> 정도면 충분.</p>
-      </div>
-      <div class="step">
-        <div class="step-num">03 — push</div>
-        <p>git commit & push 하면 GitHub Pages가 자동으로 배포.</p>
-      </div>
-      <div class="step">
-        <div class="step-num">04 — 공유</div>
-        <p>이 페이지 URL 하나만 공유하면 됨. 개별 노트 링크도 직접 공유 가능.</p>
-      </div>
+      <a class="repo-link" href="https://github.com/silvermaking/notes-html" target="_blank" rel="noopener">
+        <span class="repo-ico">↗</span> github.com/silvermaking/notes-html
+      </a>
     </div>
   </section>
 </main>

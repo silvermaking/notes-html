@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>도망간 가치 — 나를 바꾸는 실천 도구</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root{
+    --ink:#0a0e14;
+    --ink2:#11161f;
+    --panel:#161c27;
+    --panel2:#1c2333;
+    --line:#28303d;
+    --fog:#5a6678;
+    --mist:#8c97a8;
+    --paper:#dfe4ec;
+    --bright:#f2f5fa;
+    --amber:#e8a13c;
+    --amber-dim:#7a5a26;
+    --cyan:#4dd0c4;
+    --rose:#e0708a;
+    --violet:#9b8cff;
+    --green:#5ccc8a;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--ink);
+    color:var(--paper);
+    font-family:'IBM Plex Sans KR',sans-serif;
+    font-weight:300;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--amber);color:var(--ink)}
+
+  .wrap{max-width:920px;margin:0 auto;padding:0 28px}
+
+  /* ---------- TOP NAV ---------- */
+  .nav{
+    border-bottom:1px solid var(--line);
+    position:sticky;top:0;z-index:100;
+    background:rgba(10,14,20,.92);backdrop-filter:blur(12px);
+  }
+  .nav-in{display:flex;align-items:center;justify-content:space-between;padding:16px 0}
+  .nav a.back{
+    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.12em;
+    color:var(--fog);text-decoration:none;transition:.2s;
+  }
+  .nav a.back:hover{color:var(--amber)}
+  .nav .tag{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;color:var(--amber)}
+
+  /* ---------- HERO (compact) ---------- */
+  .hero{padding:56px 0 44px}
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;letter-spacing:.28em;text-transform:uppercase;
+    color:var(--amber);margin-bottom:22px;
+  }
+  .hero h1{
+    font-family:'Gowun Batang',serif;font-weight:700;
+    font-size:clamp(32px,5.6vw,58px);line-height:1.16;
+    letter-spacing:-.01em;color:var(--bright);margin-bottom:24px;
+  }
+  .hero h1 em{font-style:normal;color:var(--amber)}
+  .lede{font-size:clamp(15px,2vw,18px);color:var(--mist);max-width:620px;font-weight:300}
+  .lede b{color:var(--paper);font-weight:500}
+
+  /* ---------- DO-FIRST BANNER ---------- */
+  .dofirst{
+    margin:36px 0 0;
+    background:linear-gradient(135deg,#1c1408,#10151d);
+    border:1px solid var(--amber-dim);border-radius:6px;
+    padding:26px 28px;
+    display:flex;gap:22px;align-items:center;flex-wrap:wrap;
+  }
+  .dofirst .big{font-family:'Gowun Batang',serif;font-size:clamp(18px,2.6vw,24px);color:var(--bright);font-weight:700;line-height:1.4;flex:1;min-width:240px}
+  .dofirst .big span{color:var(--amber)}
+  .dofirst a.jump{
+    font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.05em;
+    color:var(--ink);background:var(--amber);text-decoration:none;
+    padding:12px 20px;border-radius:4px;white-space:nowrap;transition:.2s;font-weight:500;
+  }
+  .dofirst a.jump:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(232,161,60,.25)}
+
+  /* ---------- THESIS ---------- */
+  .thesis{padding:72px 0;border-top:1px solid var(--line);background:linear-gradient(180deg,var(--ink),var(--ink2))}
+  .thesis .big{font-family:'Gowun Batang',serif;font-size:clamp(22px,3.6vw,36px);line-height:1.5;color:var(--paper);font-weight:400}
+  .thesis .big strong{color:var(--amber);font-weight:700}
+  .thesis .sub{margin-top:24px;color:var(--fog);font-size:14px;font-family:'IBM Plex Mono',monospace;letter-spacing:.04em}
+
+  /* ---------- SECTION SCAFFOLD ---------- */
+  .sec{padding:78px 0;border-top:1px solid var(--line)}
+  .sec-tag{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.18em;color:var(--fog);text-transform:uppercase;margin-bottom:14px;display:block}
+  .sec h2{font-family:'Gowun Batang',serif;font-weight:700;font-size:clamp(24px,3.6vw,38px);color:var(--bright);line-height:1.25;margin-bottom:18px}
+  .sec .intro{color:var(--mist);max-width:660px;margin-bottom:42px;font-size:16px}
+
+  /* ---------- FOUR THREADS ---------- */
+  .threads{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+  @media(max-width:680px){.threads{grid-template-columns:repeat(2,1fr)}}
+  .thread{background:var(--panel);border:1px solid var(--line);border-radius:3px;padding:20px 18px;cursor:pointer;position:relative;transition:.35s cubic-bezier(.2,.8,.2,1);overflow:hidden}
+  .thread:hover{border-color:var(--amber-dim);transform:translateY(-3px)}
+  .thread.on{border-color:var(--amber);background:#1b2230}
+  .thread .num{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--amber);letter-spacing:.1em}
+  .thread .q{font-size:14px;color:var(--paper);margin-top:10px;font-weight:400;line-height:1.5}
+  .thread::after{content:'';position:absolute;left:0;bottom:0;height:2px;width:0;background:var(--amber);transition:.4s}
+  .thread.on::after{width:100%}
+  .panel-out{background:linear-gradient(180deg,#141a24,#10151d);border:1px solid var(--line);border-left:2px solid var(--amber);border-radius:3px;padding:30px 32px;min-height:160px;transition:.3s}
+  .panel-out .label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.15em;color:var(--amber);text-transform:uppercase}
+  .panel-out h3{font-family:'Gowun Batang',serif;font-size:22px;color:var(--bright);margin:10px 0 14px;font-weight:700}
+  .panel-out p{color:var(--mist);font-size:15.5px;line-height:1.75}
+  .panel-out p b{color:var(--paper);font-weight:500}
+  .panel-out .you{margin-top:16px;padding-top:16px;border-top:1px dashed var(--line);font-size:13.5px;color:var(--fog);font-style:italic}
+  .panel-out .you span{color:var(--rose);font-style:normal}
+
+  /* ---------- SPINE ---------- */
+  .spine{position:relative}
+  .node{display:grid;grid-template-columns:56px 1fr;gap:22px;padding:22px 0;position:relative}
+  .node:not(:last-child)::before{content:'';position:absolute;left:27px;top:48px;bottom:-22px;width:1px;background:linear-gradient(var(--amber-dim),var(--line))}
+  .node .dot{width:56px;height:56px;border-radius:50%;border:1px solid var(--line);background:var(--panel);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:17px;color:var(--amber);position:relative;z-index:2}
+  .node .body h4{font-size:17px;color:var(--bright);font-weight:600;margin-bottom:6px}
+  .node .body h4 small{font-family:'IBM Plex Mono',monospace;font-weight:400;color:var(--fog);font-size:12px;margin-left:8px}
+  .node .body p{color:var(--mist);font-size:15px}
+  .node .body p strong{color:var(--amber);font-weight:600}
+
+  /* ---------- LOOP ---------- */
+  .loop-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  @media(max-width:760px){.loop-grid{grid-template-columns:1fr 1fr}}
+  .step{background:var(--panel);border:1px solid var(--line);border-radius:3px;padding:22px 18px;transition:.3s}
+  .step:hover{background:#1a2230;border-color:var(--cyan)}
+  .step .n{font-family:'IBM Plex Mono',monospace;color:var(--cyan);font-size:13px;letter-spacing:.1em}
+  .step h5{font-size:15px;color:var(--bright);margin:10px 0 8px;font-weight:600}
+  .step p{font-size:13.5px;color:var(--fog);line-height:1.6}
+  .warn{margin-top:20px;padding:18px 22px;border:1px solid var(--amber-dim);border-radius:3px;background:rgba(232,161,60,.05);font-size:14.5px;color:var(--paper)}
+  .warn b{color:var(--amber)}
+
+  /* ---------- MUSK ---------- */
+  .musk{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
+  @media(max-width:680px){.musk{grid-template-columns:1fr}}
+  .musk .card{background:var(--panel);border:1px solid var(--line);border-radius:3px;padding:26px}
+  .musk .card .k{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;margin-bottom:12px}
+  .musk .card.disc .k{color:var(--rose)}
+  .musk .card.keep .k{color:var(--cyan)}
+  .musk .card h4{font-family:'Gowun Batang',serif;font-size:19px;color:var(--bright);margin-bottom:10px}
+  .musk .card p{font-size:14.5px;color:var(--mist)}
+  .musk .chain{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--fog);margin-top:14px}
+  .musk .chain s{color:var(--rose);opacity:.7}
+
+  /* ========== PRACTICE TOOL (the action core) ========== */
+  .practice{border-top:1px solid var(--line);background:linear-gradient(180deg,var(--ink2),var(--ink))}
+  .tool{
+    background:var(--panel);border:1px solid var(--line);border-radius:8px;
+    padding:30px;margin-bottom:18px;
+  }
+  .tool .head{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+  .tool .head .ix{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--amber)}
+  .tool .head h4{font-size:18px;color:var(--bright);font-weight:600}
+  .tool .desc{color:var(--mist);font-size:14px;margin-bottom:18px}
+
+  /* decision box */
+  textarea.decide{
+    width:100%;min-height:120px;resize:vertical;
+    background:var(--ink);border:1px solid var(--line);border-radius:5px;
+    color:var(--paper);font-family:'IBM Plex Sans KR',sans-serif;font-size:15px;
+    padding:16px 18px;line-height:1.7;
+  }
+  textarea.decide:focus{outline:none;border-color:var(--amber)}
+  textarea.decide::placeholder{color:var(--fog)}
+  .saverow{display:flex;align-items:center;gap:14px;margin-top:12px}
+  .savestate{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--green);opacity:0;transition:.3s}
+  .savestate.on{opacity:1}
+
+  /* copyable prompt block */
+  .codeblk{position:relative;background:var(--ink);border:1px solid var(--line);border-radius:5px;padding:20px 22px;margin-top:6px}
+  .codeblk pre{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--mist);line-height:1.85;white-space:pre-wrap;word-break:keep-all}
+  .codeblk pre b{color:var(--amber);font-weight:500}
+
+  .btn{
+    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.05em;
+    border:1px solid var(--line);background:var(--panel2);color:var(--paper);
+    padding:9px 16px;border-radius:4px;cursor:pointer;transition:.2s;
+  }
+  .btn:hover{border-color:var(--amber);color:var(--amber)}
+  .btn.copy{position:absolute;top:14px;right:14px;background:rgba(10,14,20,.8)}
+  .btn.copied{border-color:var(--green);color:var(--green)}
+
+  /* checklist */
+  .check{list-style:none;margin-top:8px}
+  .check li{display:flex;align-items:flex-start;gap:14px;padding:16px 18px;border:1px solid var(--line);border-radius:4px;margin-bottom:10px;cursor:pointer;transition:.25s;background:var(--panel)}
+  .check li:hover{border-color:var(--cyan)}
+  .check li.done{opacity:.55;border-color:var(--cyan)}
+  .check li.done .txt{text-decoration:line-through}
+  .box{flex-shrink:0;width:20px;height:20px;border:1px solid var(--fog);border-radius:3px;margin-top:2px;display:flex;align-items:center;justify-content:center;transition:.25s;font-size:12px;color:var(--ink)}
+  .check li.done .box{background:var(--cyan);border-color:var(--cyan)}
+  .check .txt{font-size:15px;color:var(--paper)}
+  .check .txt small{display:block;color:var(--fog);font-size:13px;margin-top:3px}
+  .progress{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--cyan);margin-bottom:18px;letter-spacing:.05em}
+
+  /* daily log */
+  .logrow{display:flex;gap:10px;margin-top:8px}
+  @media(max-width:560px){.logrow{flex-direction:column}}
+  input.logone{flex:1;background:var(--ink);border:1px solid var(--line);border-radius:5px;color:var(--paper);font-family:'IBM Plex Sans KR',sans-serif;font-size:14px;padding:13px 16px}
+  input.logone:focus{outline:none;border-color:var(--cyan)}
+  .logitems{margin-top:16px;list-style:none}
+  .logitems li{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);font-size:14px;color:var(--mist)}
+  .logitems li .d{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--fog);white-space:nowrap}
+  .logitems li .x{color:var(--fog);cursor:pointer;font-family:'IBM Plex Mono',monospace}
+  .logitems li .x:hover{color:var(--rose)}
+  .logempty{color:var(--fog);font-size:13px;font-style:italic;margin-top:14px}
+
+  /* ---------- CLOSING ---------- */
+  .close{padding:96px 0 80px;border-top:1px solid var(--line);text-align:center}
+  .close .mark{font-family:'IBM Plex Mono',monospace;color:var(--amber);font-size:13px;letter-spacing:.3em;margin-bottom:24px}
+  .close p{font-family:'Gowun Batang',serif;font-size:clamp(19px,2.8vw,26px);line-height:1.6;color:var(--paper);max-width:680px;margin:0 auto;font-weight:400}
+  .close p em{color:var(--amber);font-style:normal}
+  .foot{margin-top:54px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--fog);letter-spacing:.08em}
+
+  .reveal{opacity:0;transform:translateY(24px);transition:.7s cubic-bezier(.2,.8,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="wrap nav-in">
+    <a href="./index.html" class="back">← 노트 허브</a>
+    <span class="tag">실천 도구</span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero wrap">
+  <span class="eyebrow">AI 시대의 사고 지도 · 실천판</span>
+  <h1>실행이 공짜가 되면,<br>가치는 어디로 <em>도망</em>가는가</h1>
+  <p class="lede">4개의 질문 밑엔 하나의 질문이 흘렀어 — <b>"AI가 누구나 실행하게 만든 시대에, 나는 무엇이 되어야 하나."</b> 아래는 그 답이고, 더 중요한 건 <b>그 답을 이번 주에 행동으로 바꾸는 도구</b>야.</p>
+
+  <div class="dofirst">
+    <p class="big">읽기만 하면 내일이면 증발한다.<br><span>이번 주 결정 하나를 직접 적는 것</span>부터 시작해.</p>
+    <a href="#practice" class="jump">실천 도구로 →</a>
+  </div>
+</header>
+
+<!-- THESIS -->
+<section class="thesis">
+  <div class="wrap reveal">
+    <p class="big">AI가 실행을 0원에 가깝게 만들면,<br>가치는 실행에서 그 <strong>위(판단)</strong>와 <strong>아래(현실 접점)</strong>와 <strong>옆(취향·소유감)</strong>으로 도망간다.</p>
+    <p class="sub">// 너의 4개 질문은 사실, 이 도망간 가치를 각각 다른 각도에서 더듬고 있었다.</p>
+  </div>
+</section>
+
+<!-- FOUR THREADS -->
+<section class="sec wrap">
+  <span class="sec-tag reveal">01 — 네 개의 질문, 하나의 줄기</span>
+  <h2 class="reveal">질문을 눌러봐</h2>
+  <p class="intro reveal">처음엔 두서없어 보였지만, 네 질문은 1→2→3→4로 이어지는 사다리였어. 카드를 눌러서 각 질문이 실제로 가리키던 게 뭐였는지 봐.</p>
+  <div class="threads reveal">
+    <div class="thread on" data-k="q1"><span class="num">Q1</span><p class="q">AI를 어떻게 잘 활용하나</p></div>
+    <div class="thread" data-k="q2"><span class="num">Q2</span><p class="q">만든 걸 어떻게 수익·가치로</p></div>
+    <div class="thread" data-k="q3"><span class="num">Q3</span><p class="q">사람이 해야 할 일은 뭔가</p></div>
+    <div class="thread" data-k="q4"><span class="num">Q4</span><p class="q">결국 중요한 능력은</p></div>
+  </div>
+  <div class="panel-out reveal" id="threadOut"></div>
+</section>
+
+<!-- SPINE -->
+<section class="sec wrap">
+  <span class="sec-tag reveal">02 — 줄로 꿰면</span>
+  <h2 class="reveal">하나의 사고 체계</h2>
+  <p class="intro reveal">네 질문의 답은 따로 놀지 않았어. 위에서 아래로 한 줄로 이어진다.</p>
+  <div class="spine reveal">
+    <div class="node"><div class="dot">人</div><div class="body"><h4>사람 몫 <small>Q3</small></h4><p>실행이 아니라 <strong>선택하고 거기에 이름을 거는 것.</strong> AI는 선택지를 무한히 만들지만, 무엇을 고를지·왜 옳은지·틀리면 누가 책임지는지는 못 진다.</p></div></div>
+    <div class="node"><div class="dot">₩</div><div class="body"><h4>수익 <small>Q2</small></h4><p>돈은 "선택의 총합"인 <strong>관점·편향</strong>에 붙는다. 평균은 무한해서 0원, 한 사람의 치우친 시선은 희소해서 값이 매겨진다.</p></div></div>
+    <div class="node"><div class="dot">★</div><div class="body"><h4>중요한 능력 <small>Q4</small></h4><p>AI를 시키는 법이 아니라, 무한한 선택지 앞에서 <strong>"이거다" 하는 안목 + 이름 걸 배짱.</strong></p></div></div>
+    <div class="node"><div class="dot">↻</div><div class="body"><h4>기르는 법 <small>Q1의 진짜 답</small></h4><p>직관 루프(예측→반박→틈 언어화)를 누적 그릇에 쌓기. AI를 정답지가 아니라 <strong>스파링 상대</strong>로.</p></div></div>
+    <div class="node"><div class="dot">→</div><div class="body"><h4>너의 전략 <small>머스크 모델</small></h4><p>도메인은 갈아타도 <strong>"낯선 분야에 들어가 빨리 정복하는 능력"은 누적</strong>된다. 첫 훈련장은 우울증 스타트업, 완주가 1순위.</p></div></div>
+  </div>
+</section>
+
+<!-- LOOP -->
+<section class="sec wrap">
+  <span class="sec-tag reveal">03 — 매일 돌리는 엔진</span>
+  <h2 class="reveal">직관 루프</h2>
+  <p class="intro reveal">직관은 <b>예측 → 틀림 → 틈을 통한 학습</b>의 반복에서 생긴다. 핵심은 "틀림"이 아니라 <b>예측을 먼저 했다는 것.</b> 그래서 순서를 뒤집는다.</p>
+  <div class="loop-grid reveal">
+    <div class="step"><span class="n">01</span><h5>예측 먼저</h5><p>묻기 전에 내 가설을 적는다. 어설퍼도 적는 순간 틀릴 준비가 된다.</p></div>
+    <div class="step"><span class="n">02</span><h5>AI를 반대편에</h5><p>"내 가설을 반박해라. 베테랑이라면 비웃을 지점을 찾아라."</p></div>
+    <div class="step"><span class="n">03</span><h5>틈을 언어화</h5><p>내 예측과 AI 반박 사이의 틈을 한 줄로. "내가 틀린 지점은 여기다."</p></div>
+    <div class="step"><span class="n">04</span><h5>다음엔 미리 메우고</h5><p>반복하면 내 예측이 AI의 반박을 미리 품는다. 그게 직관이 자란 것.</p></div>
+  </div>
+  <div class="warn reveal">⚠ <b>1번을 건너뛰면 압축이 아니라 정답 베끼기다.</b> 직관은 0. 이 루프의 성패는 도구가 아니라 "AI한테 묻기 전에 내 예측을 먼저 적는 1초의 습관"에 달려 있다.</div>
+</section>
+
+<!-- MUSK -->
+<section class="sec wrap">
+  <span class="sec-tag reveal">04 — 머스크 모델</span>
+  <h2 class="reveal">버릴 것과 누적할 것</h2>
+  <p class="intro reveal">머스크의 핵심은 "여러 회사"가 아니라 <b>매번 도메인을 0에서 갈아탄 것.</b> 그럼 따라다닌 건 뭐였나 — 그게 너의 자산이 될 것과 같다.</p>
+  <div class="musk reveal">
+    <div class="card disc"><span class="k">갈아타도 되는 것</span><h4>도메인 지식</h4><p>매번 0에서 시작해도 되는 소모품. 결제도, 자동차도, 로켓도 처음엔 문외한이었다.</p><p class="chain"><s>결제 → 자동차 → 로켓 → SNS</s></p></div>
+    <div class="card keep"><span class="k">누적되는 것</span><h4>고르는 방식</h4><p>제1원리로 전제를 부수고, 베팅하고, 자기 전부를 거는 메타 능력. 도메인을 갈아타도 살아남는 진짜 자산.</p><p class="chain">정복 사이클 ↻ 매번 더 빨라진다</p></div>
+  </div>
+  <div class="warn reveal" style="border-color:var(--rose);background:rgba(224,112,138,.05)">⚠ <b style="color:var(--rose)">함정:</b> 갈아타기 전략은 "어디에도 깊이 몰입 않고 떠도는 것"으로 변질되기 쉽다. 정복자는 떠돌이와 다르다 — <b style="color:var(--rose)">한 번에 하나는 끝까지 정복하고 떠난다.</b> 그래서 "메인 훈련장 + 사이드 실험장"의 주종 관계로 본다.</div>
+</section>
+
+<!-- ============ PRACTICE TOOL ============ -->
+<section class="practice" id="practice">
+  <div class="wrap" style="padding-top:78px;padding-bottom:78px">
+    <span class="sec-tag reveal" style="color:var(--amber)">05 — 여기서부터가 진짜다</span>
+    <h2 class="reveal" style="font-family:'Gowun Batang',serif;font-weight:700;font-size:clamp(24px,3.6vw,38px);color:var(--bright);line-height:1.25;margin-bottom:18px">실천 도구</h2>
+    <p class="intro reveal">위는 지도였고, 여기는 손이다. 아래 입력은 <b>이 브라우저에 저장</b>돼서 다시 와도 남아 있다. 읽고 닫지 말고, 한 칸이라도 채워라.</p>
+
+    <!-- TOOL 1: decision -->
+    <div class="tool reveal">
+      <div class="head"><span class="ix">①</span><h4>이번 주의 결정 하나</h4></div>
+      <p class="desc">"실행"이 아니라 "선택"인 결정. AI에게 먼저 묻지 말고 <b>네가 먼저 고른다.</b> 어설퍼도 적는 순간 예측이 시작된다. (예: "우리 앱은 리텐션을 좇지 않고 위기 신호 감지에 집중한다. 나는 ___ 때문에 그렇게 본다. 내 예측은 ___ 다.")</p>
+      <textarea class="decide" id="decision" placeholder="나는 ___ 를 ___ 라고 결정한다.&#10;그 이유는 ___ 다.&#10;내 예측은 ___ 다. (틀리면 ___ 신호일 것)"></textarea>
+      <div class="saverow">
+        <button class="btn" id="saveDec">저장</button>
+        <span class="savestate" id="decSaved">✓ 저장됨</span>
+      </div>
+    </div>
+
+    <!-- TOOL 2: sparring prompt -->
+    <div class="tool reveal">
+      <div class="head"><span class="ix">②</span><h4>스파링 프롬프트 (복사 → Project 지침에)</h4></div>
+      <p class="desc">claude.ai → Projects → "직관 스파링" 생성 → "Set project instructions"에 아래를 통째로 붙여넣어라. AI를 동의 기계가 아니라 너를 깨는 망치로 고정한다.</p>
+      <div class="codeblk">
+        <button class="btn copy" data-copy="sparring">복사</button>
+        <pre id="sparring">나는 우울증 디지털치료제 스타트업의 개발자다. 도메인 직관을 빠르게 기르려고 너를 스파링 상대로 쓴다. 내가 판단이나 가설을 말하면 절대 바로 동의하지 마라.
+
+순서대로 답해라:
+(1) 내 가설의 가장 약한 고리를 짚어라.
+(2) 이 분야 베테랑이라면 즉시 봤을, 내가 놓친 것을 말하라.
+(3) 첨부된 '사고오류 로그'를 읽고, 내가 반복하는 사고 오류 패턴에 이번 게 해당하는지 지적하라. 새 패턴이면 새로 명명하라.
+(4) 마지막에 이 대화를 로그에 붙일 한 줄 요약을 다음 형식으로 줘라: [날짜 / 내 결정·예측 / 내가 놓친 것 / 오류패턴 태그]
+
+규칙: 나를 편하게 해주지 마라. 통념적인 답은 먼저 반박하고 시작하라. 칭찬·격려는 빼라. 내가 다음엔 덜 틀리게 만드는 게 네 유일한 목표다.</pre>
+      </div>
+    </div>
+
+    <!-- TOOL 3: setup checklist -->
+    <div class="tool reveal">
+      <div class="head"><span class="ix">③</span><h4>셋업 체크리스트</h4></div>
+      <p class="desc">눌러서 완료 표시 (저장됨). 도구는 더 늘리지 않는다 — 늘리면 안 지켜진다.</p>
+      <p class="progress" id="prog">0 / 4 완료</p>
+      <ul class="check" id="checklist">
+        <li data-i="1"><span class="box">✓</span><span class="txt">Project 생성 <small>claude.ai/projects → "+ New Project" → 이름 "직관 스파링"</small></span></li>
+        <li data-i="2"><span class="box">✓</span><span class="txt">지침 붙여넣기 <small>위 ② 프롬프트를 "Set project instructions"에</small></span></li>
+        <li data-i="3"><span class="box">✓</span><span class="txt">사고오류 로그 업로드 <small>project knowledge "+" → 빈 .md (날짜/결정/예측/실제/오류패턴 헤더)</small></span></li>
+        <li data-i="4"><span class="box">✓</span><span class="txt">첫 바퀴 돌리기 <small>위 ①의 결정을 예측 형식으로 던지고 반박받기</small></span></li>
+      </ul>
+    </div>
+
+    <!-- TOOL 4: daily log -->
+    <div class="tool reveal">
+      <div class="head"><span class="ix">④</span><h4>틈 로그 — 하루 한 줄</h4></div>
+      <p class="desc">루프 3단계("내가 틀린 지점은 여기다")를 한 줄로 남긴다. 한 달 쌓이면 너만의 <b>반복 오류 패턴</b>이 보인다. 그게 직관이 자란 증거다.</p>
+      <div class="logrow">
+        <input class="logone" id="logInput" placeholder="오늘 내 예측과 현실 사이의 틈: 나는 ___ 라고 봤는데 사실은 ___ 였다" />
+        <button class="btn" id="logAdd">추가</button>
+      </div>
+      <ul class="logitems" id="logList"></ul>
+      <p class="logempty" id="logEmpty">아직 기록 없음. 오늘 틀린 것 하나를 적어봐.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSING -->
+<section class="close wrap">
+  <div class="reveal">
+    <p class="mark">— 한 문장으로 —</p>
+    <p>AI가 실행을 공짜로 만든 시대에 사람에게 남는 유일하게 비싼 일은 <em>"무한한 선택지 앞에서 고르고, 그 선택에 이름을 거는 것"</em>이다.</p>
+    <p class="foot">이 지도의 다섯 조각은 이미 네 안에 있던 직감이었다 · 나는 줄로 꿰었을 뿐</p>
+  </div>
+</section>
+
+<script>
+  const NS = 'dofirst-v1:';
+
+  // ---- thread panel ----
+  const data = {
+    q1:{label:'Q1 · AI 활용',h:'사실은: "AI가 못 하는 경계를 어떻게 찾나"',
+      p:'표면은 "AI를 잘 쓰는 법"이지만, 너는 곧 <b>"물고기 말고 잡는 법"</b>을 원한다고 교정했다. 진짜 질문은 입력 기술이 아니라 — 같은 AI한테 물어도 주니어·시니어·CTO·머스크가 다른 답을 얻는 이유, 즉 <b>질문 이전에 머릿속에 무엇이 있나</b>였다.',
+      you:'네 단서: <span>"알림은 쉬운데, 환자에게 전화는 못 하잖아"</span> — 경계를 정확히 짚은 직감.'},
+    q2:{label:'Q2 · 수익화',h:'사실은: "도망간 가치가 어디 있나"',
+      p:'"만드는 건 공짜가 됐는데 아무도 안 본다." 소설이 안 읽힌 건 글이 나빠서가 아니라 <b>세상에 글이 무한해졌기 때문.</b> 안 팔린 부분은 전부 생산 <b>바깥</b>(관점·유통·신뢰·관계)이었다.',
+      you:'네 단서: <span>"내가 만든 게 아니니 정감이 안 간다"</span> — 소유권 공백의 자가진단.'},
+    q3:{label:'Q3 · 사람 몫',h:'사실은: Q2의 답과 한 몸',
+      p:'AI가 생산을 공짜로 만들면 가치는 생산 바깥으로 도망가고, 그 자리가 곧 <b>"사람만 할 수 있는 일"</b>이자 <b>"돈이 나는 자리"</b>다. 사람 몫 = 실행이 아니라 <b>선택에 자기 이름을 거는 일.</b>',
+      you:'연결: Q3을 풀면 Q2가 자동으로 풀린다. 같은 동전의 양면.'},
+    q4:{label:'Q4 · 중요한 능력',h:'사실은: 모든 질문이 모이는 점',
+      p:'중요한 건 "AI를 시키는 능력"이 아니다 — 그건 누구나 한다. 무한한 선택지 앞에서 <b>고를 수 있는 안목</b>과 그 선택에 <b>이름을 걸 배짱.</b> 질문의 질을 결정하는 건 프롬프트 기술이 아니라 <b>그 도메인에서 얼마나 깨져봤느냐.</b>',
+      you:'네 욕망: <span>"chief의 입장 / 머스크처럼 길을 안 정한 것"</span> — 선택하고 책임지는 자리.'}
+  };
+  const out = document.getElementById('threadOut');
+  function render(k){const d=data[k];out.innerHTML=`<span class="label">${d.label}</span><h3>${d.h}</h3><p>${d.p}</p><p class="you">${d.you}</p>`;}
+  render('q1');
+  document.querySelectorAll('.thread').forEach(t=>{
+    t.addEventListener('click',()=>{
+      document.querySelectorAll('.thread').forEach(x=>x.classList.remove('on'));
+      t.classList.add('on');render(t.dataset.k);
+    });
+  });
+
+  // ---- decision box (persist) ----
+  const dec=document.getElementById('decision'),decSaved=document.getElementById('decSaved');
+  try{dec.value=localStorage.getItem(NS+'decision')||'';}catch(e){}
+  function saveDec(){try{localStorage.setItem(NS+'decision',dec.value);decSaved.classList.add('on');setTimeout(()=>decSaved.classList.remove('on'),1600);}catch(e){}}
+  document.getElementById('saveDec').addEventListener('click',saveDec);
+  let decT;dec.addEventListener('input',()=>{clearTimeout(decT);decT=setTimeout(saveDec,800);});
+
+  // ---- copy buttons ----
+  document.querySelectorAll('.btn.copy').forEach(b=>{
+    b.addEventListener('click',()=>{
+      const txt=document.getElementById(b.dataset.copy).innerText;
+      navigator.clipboard.writeText(txt).then(()=>{
+        const o=b.textContent;b.textContent='✓ 복사됨';b.classList.add('copied');
+        setTimeout(()=>{b.textContent=o;b.classList.remove('copied');},1600);
+      });
+    });
+  });
+
+  // ---- checklist (persist) ----
+  const items=document.querySelectorAll('#checklist li'),prog=document.getElementById('prog');
+  function loadCheck(){try{return JSON.parse(localStorage.getItem(NS+'check')||'[]');}catch(e){return[];}}
+  function saveCheck(){const done=[...items].filter(li=>li.classList.contains('done')).map(li=>li.dataset.i);try{localStorage.setItem(NS+'check',JSON.stringify(done));}catch(e){}}
+  function upd(){const n=document.querySelectorAll('#checklist li.done').length;prog.textContent=n===4?'4 / 4 완료 — 셋업 끝. 이제 매일 한 바퀴.':`${n} / 4 완료`;}
+  const saved=loadCheck();items.forEach(li=>{if(saved.includes(li.dataset.i))li.classList.add('done');li.addEventListener('click',()=>{li.classList.toggle('done');saveCheck();upd();});});upd();
+
+  // ---- daily log (persist) ----
+  const logInput=document.getElementById('logInput'),logList=document.getElementById('logList'),logEmpty=document.getElementById('logEmpty'),logAdd=document.getElementById('logAdd');
+  function loadLog(){try{return JSON.parse(localStorage.getItem(NS+'log')||'[]');}catch(e){return[];}}
+  function saveLog(a){try{localStorage.setItem(NS+'log',JSON.stringify(a));}catch(e){}}
+  function renderLog(){
+    const a=loadLog();logList.innerHTML='';
+    logEmpty.style.display=a.length?'none':'block';
+    a.forEach((it,i)=>{
+      const li=document.createElement('li');
+      li.innerHTML=`<span class="d">${it.d}</span><span style="flex:1">${it.t.replace(/</g,'&lt;')}</span><span class="x" data-i="${i}">✕</span>`;
+      logList.appendChild(li);
+    });
+    logList.querySelectorAll('.x').forEach(x=>x.addEventListener('click',()=>{const a=loadLog();a.splice(+x.dataset.i,1);saveLog(a);renderLog();}));
+  }
+  function addLog(){
+    const t=logInput.value.trim();if(!t)return;
+    const now=new Date();const d=`${now.getMonth()+1}/${now.getDate()}`;
+    const a=loadLog();a.unshift({d,t});saveLog(a);logInput.value='';renderLog();
+  }
+  logAdd.addEventListener('click',addLog);
+  logInput.addEventListener('keydown',e=>{if(e.key==='Enter')addLog();});
+  renderLog();
+
+  // ---- scroll reveal ----
+  const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
