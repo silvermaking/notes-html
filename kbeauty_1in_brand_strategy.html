@@ -279,6 +279,29 @@
   .def h4{font-family:var(--font-display);font-weight:800;font-size:15.5px;margin:0 0 6px;letter-spacing:-0.01em}
   .def p{font-size:13px;color:var(--ink-2);margin:0;line-height:1.55}
 
+  /* ---------- ops / prompt cards ---------- */
+  .opscol{font-size:13px;color:var(--coral-deep)}
+  .opscol b{color:var(--coral-deep);font-weight:600}
+  .promptgrid{display:grid;gap:14px;margin:16px 0 6px}
+  @media (min-width:760px){.promptgrid{grid-template-columns:1fr 1fr}}
+  .promptcard{background:var(--ink);border:1px solid #213029;border-radius:13px;overflow:hidden;
+    display:flex;flex-direction:column}
+  .promptcard .pc-head{display:flex;align-items:center;justify-content:space-between;gap:10px;
+    padding:13px 15px;border-bottom:1px solid #213029}
+  .promptcard .pc-title{display:flex;flex-direction:column;gap:3px}
+  .promptcard .pc-when{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.1em;
+    text-transform:uppercase;color:#7FBFAE;font-weight:600}
+  .promptcard .pc-name{font-family:var(--font-display);font-weight:800;font-size:14.5px;
+    color:#EAF2EC;letter-spacing:-0.01em;line-height:1.2}
+  .promptcard pre{margin:0;padding:14px 15px;font-family:var(--font-mono);font-size:12px;line-height:1.7;
+    color:#CFE0D7;white-space:pre-wrap;word-break:break-word;flex:1}
+  .promptcard pre .var{color:#E59B86}
+  .copybtn{font-family:var(--font-mono);font-size:10px;font-weight:600;letter-spacing:.06em;
+    text-transform:uppercase;color:#7FBFAE;background:transparent;border:1px solid #2C3E37;
+    border-radius:7px;padding:5px 11px;cursor:pointer;transition:all .18s;white-space:nowrap}
+  .copybtn:hover{color:#0a0e14;background:#7FBFAE;border-color:#7FBFAE}
+  .copybtn.done{color:#0a0e14;background:#74C8B2;border-color:#74C8B2}
+
   /* ---------- footer ---------- */
   .foot{border-top:1px solid var(--line);margin-top:46px;background:var(--paper-band)}
   .foot-inner{max-width:var(--wrap);margin:0 auto;padding:30px 28px 42px}
@@ -324,6 +347,7 @@
       <a href="#legal">04 관문</a>
       <a href="#synthesis">05 통합</a>
       <a href="#case">06 케이스</a>
+      <a href="#ops">07 운영</a>
     </nav>
   </div>
   <div class="progress"><div class="progress-bar" id="pbar"></div></div>
@@ -786,12 +810,126 @@
   </div>
 </section>
 
+<!-- 07 Claude 운영체제 -->
+<section class="sec" id="ops">
+  <div class="wrap">
+    <div class="sec-head rev">
+      <span class="eyebrow">07 / Claude 운영체제</span>
+      <h2 class="h2">1인을 10인처럼 —<br>단, 해자는 못 산다</h2>
+      <p class="lead">질문에 답부터. <b>팔 수 있다.</b> Claude는 이 플레이북의 ‘리서치·분석·콘텐츠·CS’ 레이어를 혼자 감당할 크기로 압축한다. 6개월 전이라면 팀이 필요했던 일을 한 사람이 돌린다. 그런데 바로 그래서 — <b>경쟁자도 같은 무기를 든다.</b> Claude는 기본기(table stakes)지, 해자가 아니다.</p>
+    </div>
+
+    <div class="keybar rev" style="max-width:none">
+      <span class="k-tag">07의 핵심 명제</span>
+      <span class="k-line">Claude가 바꾸는 건 <span class="yes">비용</span>, 못 바꾸는 건 <span class="neq">해자</span></span>
+    </div>
+
+    <h3 class="h3 rev">플레이북을 Claude에게 어디까지 넘기나</h3>
+    <div class="tablewrap rev">
+      <table>
+        <thead><tr><th>단계</th><th>Claude가 증폭 — 거의 무료로</th><th>사람·자본·법인만 — Claude 불가</th></tr></thead>
+        <tbody>
+          <tr><td>00 리서치</td><td>리뷰 100개 불만 클러스터링, 1페이지 경쟁 격차 정리, 트렌드 자료 요약·교차검증</td><td class="opscol">실제 검색량·매출 데이터 <b>구매 결정</b>, 시장 베팅</td></tr>
+          <tr><td>01 틈새</td><td>가설 생성, ‘진짜 빈틈 vs 비어서 빈 칸’ 논증, No-Go 기준 설계</td><td class="opscol">최종 칸 선택은 <b>너의 베팅</b></td></tr>
+          <tr><td>02 채널</td><td>채널별 손익·손익분기 시뮬레이션, 가격·마진 계산</td><td class="opscol">실제 입점 협상, <b>MD·벤더 관계</b></td></tr>
+          <tr><td>03 신뢰</td><td>성분 스토리, 상세페이지 카피, 썸네일 브리프, SEO 키워드, 인플루언서 시딩 메시지</td><td class="opscol">진짜 후기·실사용 신뢰는 <b>조작 불가</b></td></tr>
+          <tr><td>04 규제</td><td>카피의 기능성·의약품 표현 1차 점검, 매뉴얼·후기조건 초안</td><td class="opscol">책임판매업 등록·품질검사 위탁, <b>법적 책임</b></td></tr>
+          <tr><td>운영</td><td>CS 답변 초안, 리뷰 응대, 정기 실적보고 정리, 재고·발주 계산</td><td class="opscol">실제 배송·환불·세무, <b>현금흐름</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="src rev">Claude의 규제 점검은 ‘출고 전 1차 필터’지 법률 자문이 아니다. 최종 표현은 식약처 가이드·전문가 확인 권장.</p>
+
+    <h3 class="h3 rev">복사해서 바로 쓰는 4개 프롬프트</h3>
+    <div class="promptgrid rev">
+
+      <div class="promptcard">
+        <div class="pc-head">
+          <div class="pc-title">
+            <span class="pc-when">Week 1 · 게이트</span>
+            <span class="pc-name">① 리뷰 마이닝</span>
+          </div>
+          <button class="copybtn" type="button">복사</button>
+        </div>
+<pre>아래는 <span class="var">[제품 카테고리]</span>의 실제 리뷰 100개다. 표로 정리해줘.
+1) 반복되는 불만 — 같은 의미끼리 묶고 등장 횟수 카운트
+2) 사용 맥락(언제·왜), 피부타입, 구매 시 쓴 표현(검색어 후보)
+3) 100개 중 30회 이상 반복되는 불만이 있나?
+   있으면 그게 첫 SKU 후보다. 한 문장으로 정의해줘.
+
+<span class="var">[여기에 리뷰 붙여넣기]</span></pre>
+      </div>
+
+      <div class="promptcard">
+        <div class="pc-head">
+          <div class="pc-title">
+            <span class="pc-when">출고 전 · 필수</span>
+            <span class="pc-name">② 규제 안전성 점검</span>
+          </div>
+          <button class="copybtn" type="button">복사</button>
+        </div>
+<pre>나는 화장품책임판매업자다. 아래 상세페이지/광고 문구에서
+화장품법상 '기능성(주름·미백·자외선차단)' 또는
+'의약품 오인(치료·탈모·항염)'으로 해석될 표현을 전부 찾아라.
+각각 (1) 위험한 이유 (2) 비기능성으로 안전하게 바꾼 대안을 줘.
+
+<span class="var">[여기에 문구 붙여넣기]</span></pre>
+      </div>
+
+      <div class="promptcard">
+        <div class="pc-head">
+          <div class="pc-title">
+            <span class="pc-when">03 신뢰 · 콘텐츠</span>
+            <span class="pc-name">③ 히어로 상세페이지 카피</span>
+          </div>
+          <button class="copybtn" type="button">복사</button>
+        </div>
+<pre>제품: <span class="var">[한 줄 설명]</span> / 타깃: <span class="var">[예: 당김 심한 50대]</span>
+규칙을 지켜 써줘.
+① 카테고리 키워드(검색용)와 상황 네이밍(브랜딩용)을 분리해 둘 다
+② '맞는 사람 / 안 맞는 사람'을 명시
+③ 히어로 성분 1개의 스토리(전 성분 투명 공개 톤)
+④ 기능성·의약품 표현 금지
+→ 헤드라인 10개 + 상세페이지 섹션 구조</pre>
+      </div>
+
+      <div class="promptcard">
+        <div class="pc-head">
+          <div class="pc-title">
+            <span class="pc-when">02 채널 · 의사결정</span>
+            <span class="pc-name">④ 채널 손익 시뮬레이션</span>
+          </div>
+          <button class="copybtn" type="button">복사</button>
+        </div>
+<pre>원가 <span class="var">[X]</span>원, 판매가 <span class="var">[Y]</span>원 제품의 채널별 실수령
+마진과 손익분기 판매량을 표로 계산해줘.
+· 스마트스토어 수수료 ~3~6%
+· 쿠팡 ~25.8% + 광고
+· 올리브영 오프라인 ~55%
+· 자사몰 PG 3~4% + CAC <span class="var">[Z]</span>원
+결론: 어디부터 시작해야 흑자인가?</pre>
+      </div>
+
+    </div>
+
+    <div class="callout risk rev">
+      <div class="c-head">AI 시대의 진짜 해자</div>
+      <p><b>AI가 콘텐츠를 공짜로 만들면, 경쟁자도 공짜로 만든다.</b> 2024년 신규 책임판매업 4,226건 중 상당수가 지금 같은 AI 무기를 든다. 그래서 차별점은 다시 Claude가 못 만지는 것들로 회귀한다 — 못 베끼는 ①<b>진짜 사용 신뢰</b>(꼼평단·실패 기록·실사용 추적), ②재고를 감당하는 <b>현금흐름</b>, ③규제를 정확히 통과하는 <b>법적 책임</b>, ④인플루언서·MD·재구매 고객과의 <b>관계</b>. Claude는 이 넷으로 가는 길을 싸고 빠르게 깔 뿐, 넷 자체를 사주지는 않는다.</p>
+    </div>
+
+    <div class="callout insight rev">
+      <div class="c-head">결론 · 그래서 팔 수 있나</div>
+      <p>그렇다. Claude로 <b>리서치·검증·카피·CS·규제 초안</b>까지 1인이 끝낼 수 있다. 다만 Claude가 <b>대신 못 하는</b> 등록(책임판매업)·재고(MOQ 자본)·품질검사(공인기관)·진짜 신뢰·법적 책임은 네 몫으로 남는다. 정리하면 — Claude는 이 문서의 명제(‘제품 만들기는 끝난 게임’)를 한 단계 더 민다: <b>‘콘텐츠·지식 만들기도 끝난 게임’</b>. 그래서 남는 승부처는 처음부터 말한 그것, <span style="color:var(--jade-deep);font-weight:600">유통·신뢰·규제</span>다.</p>
+    </div>
+  </div>
+</section>
+
 <footer class="foot">
   <div class="foot-inner">
     <p class="fline">실행은 <span class="hl">이 플레이북</span>, 표적 선정은 <span class="hl">데이터</span>로 — 그렇게 분업시키면 “잘못된 칸에서 완벽하게 실행하는” 위험이 사라진다.</p>
     <div class="fmeta">
       1인 K-뷰티 브랜드 전략 도시에 · 빠른 실행형 빌더용<br>
-      다음 단계 후보 — 갱년기 1페이지 실행 체크리스트 / 두피 칸 병렬 적용 비교
+      다음 단계 후보 — 4개 프롬프트로 갱년기 칸 실제 검증 1회전 / 두피 칸 병렬 적용 비교
     </div>
     <div class="src-note">
       DATA SOURCES · 식약처 의약품안전나라 · 공정거래위원회 2024 유통거래 실태조사 · 청년일보 · 삼일PwC · WGSN(via 화해 비즈니스) · 트렌디어 올리브영 리뷰 분석 · 롱블랙 · 싱클리 · 코스인 · 딜사이트 · 네이버 스마트스토어 공지 · 화장품법/시행규칙. 모든 수치는 2024~2026년 공개 자료 기준이며, 규제·수수료는 변동될 수 있으니 실행 시점에 재확인 권장.
@@ -834,6 +972,27 @@
     });
   }, {threshold:0.01, rootMargin:'-45% 0px -50% 0px'});
   secs.forEach(function(s){ if(s) navObs.observe(s); });
+
+  // copy prompt buttons
+  document.querySelectorAll('.copybtn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var pre = btn.closest('.promptcard').querySelector('pre');
+      if(!pre) return;
+      var text = pre.innerText;
+      var done = function(){
+        btn.textContent = '복사됨 ✓'; btn.classList.add('done');
+        setTimeout(function(){ btn.textContent = '복사'; btn.classList.remove('done'); }, 1600);
+      };
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(done).catch(function(){ done(); });
+      } else {
+        var ta = document.createElement('textarea');
+        ta.value = text; document.body.appendChild(ta); ta.select();
+        try{ document.execCommand('copy'); }catch(e){}
+        document.body.removeChild(ta); done();
+      }
+    });
+  });
 </script>
 </body>
 </html>
