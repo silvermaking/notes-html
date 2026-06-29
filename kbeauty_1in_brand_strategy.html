@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1인 K-뷰티 브랜드 전략 도시에</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@500;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#EEF2EC;
+    --paper-band:#E5ECE6;
+    --surface:#FFFFFF;
+    --surface-2:#F7FAF6;
+    --ink:#13201B;
+    --ink-2:#3B4A43;
+    --ink-3:#69786F;
+    --line:#D2DCD3;
+    --line-soft:#E0E7E0;
+    --jade:#0B6B5B;
+    --jade-deep:#084C40;
+    --jade-tint:#DCEAE3;
+    --jade-tint-2:#EAF2EC;
+    --coral:#BD4A33;
+    --coral-deep:#9C3A26;
+    --coral-tint:#F6E3DC;
+    --gold:#977826;
+
+    --font-display:'Gothic A1','IBM Plex Sans KR',system-ui,sans-serif;
+    --font-body:'IBM Plex Sans KR','Gothic A1',system-ui,sans-serif;
+    --font-mono:'IBM Plex Mono','IBM Plex Sans KR',ui-monospace,monospace;
+
+    --wrap:980px;
+    --rail:124px;
+  }
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--font-body);
+    font-size:16.5px;
+    line-height:1.72;
+    -webkit-font-smoothing:antialiased;
+    letter-spacing:-0.005em;
+  }
+
+  /* ---------- top bar + progress ---------- */
+  .topbar{
+    position:sticky;top:0;z-index:50;
+    background:rgba(238,242,236,0.86);
+    backdrop-filter:saturate(140%) blur(10px);
+    border-bottom:1px solid var(--line-soft);
+  }
+  .topbar-inner{
+    max-width:var(--wrap);margin:0 auto;
+    display:flex;align-items:center;justify-content:space-between;gap:18px;
+    padding:11px 28px;
+  }
+  .brand{
+    font-family:var(--font-mono);font-size:11.5px;letter-spacing:0.14em;
+    text-transform:uppercase;color:var(--jade);font-weight:600;white-space:nowrap;
+  }
+  .navlinks{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+  .navlinks a{
+    font-family:var(--font-mono);font-size:11px;letter-spacing:0.04em;
+    color:var(--ink-3);text-decoration:none;padding:5px 8px;border-radius:6px;
+    transition:color .18s,background .18s;
+  }
+  .navlinks a:hover,.navlinks a:focus-visible{color:var(--jade-deep);background:var(--jade-tint)}
+  .navlinks a.on{color:var(--jade-deep);background:var(--jade-tint)}
+  .progress{height:2px;background:transparent}
+  .progress-bar{height:100%;width:0;background:var(--jade);transition:width .1s linear}
+
+  /* ---------- layout primitives ---------- */
+  .wrap{max-width:var(--wrap);margin:0 auto;padding:0 28px}
+  .sec{padding:62px 0 8px}
+  .sec:last-of-type{padding-bottom:40px}
+  .sec-head{margin-bottom:30px}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:9px;
+    font-family:var(--font-mono);font-size:11.5px;letter-spacing:0.16em;
+    text-transform:uppercase;color:var(--jade);font-weight:600;margin-bottom:14px;
+  }
+  .eyebrow::before{content:"";width:26px;height:1.5px;background:var(--jade);display:inline-block}
+  h2.h2{
+    font-family:var(--font-display);font-weight:900;
+    font-size:clamp(27px,4.6vw,40px);line-height:1.1;letter-spacing:-0.02em;
+    margin:0 0 14px;color:var(--ink);
+  }
+  .lead{font-size:16.5px;color:var(--ink-2);max-width:62ch;margin:0}
+  h3.h3{
+    font-family:var(--font-display);font-weight:800;font-size:19px;letter-spacing:-0.01em;
+    margin:34px 0 12px;color:var(--ink);
+  }
+  p{margin:0 0 14px}
+  .muted{color:var(--ink-3)}
+  .src{font-family:var(--font-mono);font-size:11px;color:var(--ink-3);letter-spacing:0.01em}
+  a.inl{color:var(--jade-deep);text-decoration:underline;text-underline-offset:2px}
+
+  /* ---------- chips ---------- */
+  .chip{
+    display:inline-flex;align-items:center;gap:6px;
+    font-family:var(--font-mono);font-size:10.5px;font-weight:600;letter-spacing:0.06em;
+    text-transform:uppercase;padding:3px 9px;border-radius:100px;line-height:1.4;
+    white-space:nowrap;vertical-align:middle;
+  }
+  .chip.adopt{background:var(--jade-tint);color:var(--jade-deep)}
+  .chip.fix{background:var(--coral-tint);color:var(--coral-deep)}
+  .chip.gate{background:var(--coral-deep);color:#fff}
+  .chip.data{background:#15201B;color:#E6EFE9}
+  .chip.soft{background:var(--paper-band);color:var(--ink-2)}
+
+  /* ---------- hero ---------- */
+  .hero{
+    position:relative;overflow:hidden;
+    background:
+      radial-gradient(120% 90% at 88% -10%, var(--jade-tint) 0%, rgba(220,234,227,0) 55%),
+      radial-gradient(90% 70% at 0% 110%, var(--jade-tint-2) 0%, rgba(234,242,236,0) 60%),
+      var(--paper);
+    border-bottom:1px solid var(--line);
+  }
+  .hero-inner{max-width:var(--wrap);margin:0 auto;padding:74px 28px 58px}
+  .hero .eyebrow{margin-bottom:22px}
+  h1.h1{
+    font-family:var(--font-display);font-weight:900;
+    font-size:clamp(33px,6.4vw,62px);line-height:1.04;letter-spacing:-0.03em;
+    margin:0 0 22px;color:var(--ink);
+  }
+  h1.h1 .hl{color:var(--jade);position:relative;white-space:nowrap}
+  .hero-sub{font-size:clamp(16px,2vw,18.5px);color:var(--ink-2);max-width:60ch;margin:0 0 36px}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);
+    border:1px solid var(--line);border-radius:12px;overflow:hidden;max-width:680px;margin-bottom:30px}
+  .stat{background:var(--surface);padding:18px 20px}
+  .stat .num{font-family:var(--font-mono);font-weight:600;font-size:clamp(24px,3.6vw,32px);
+    color:var(--jade-deep);line-height:1;letter-spacing:-0.02em}
+  .stat .num .u{font-size:0.5em;color:var(--ink-3);margin-left:3px}
+  .stat .lbl{font-size:12.5px;color:var(--ink-2);margin-top:8px;line-height:1.45}
+  .stat .lbl b{color:var(--ink);font-weight:600}
+
+  .keybar{
+    display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+    background:var(--ink);color:#EAF2EC;border-radius:13px;padding:20px 24px;max-width:680px;
+  }
+  .keybar .k-tag{font-family:var(--font-mono);font-size:10.5px;letter-spacing:0.14em;
+    text-transform:uppercase;color:#7FBFAE;font-weight:600}
+  .keybar .k-line{font-family:var(--font-display);font-weight:800;font-size:clamp(18px,2.6vw,23px);
+    letter-spacing:-0.01em;line-height:1.2}
+  .keybar .k-line .neq{color:#E59B86}
+  .keybar .k-line .yes{color:#74C8B2}
+
+  /* ---------- callouts ---------- */
+  .callout{border-radius:12px;padding:18px 20px;margin:20px 0;border:1px solid var(--line-soft);
+    background:var(--surface)}
+  .callout .c-head{display:flex;align-items:center;gap:10px;margin-bottom:8px;
+    font-family:var(--font-mono);font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase}
+  .callout p{margin:0;font-size:15.5px}
+  .callout.insight{background:linear-gradient(180deg,var(--jade-tint-2),var(--surface));border-color:var(--jade-tint)}
+  .callout.insight .c-head{color:var(--jade-deep)}
+  .callout.risk{background:linear-gradient(180deg,var(--coral-tint),var(--surface));border-color:#EBC9BF}
+  .callout.risk .c-head{color:var(--coral-deep)}
+  .callout b{color:var(--ink);font-weight:600}
+
+  /* ---------- niche cards ---------- */
+  .grid{display:grid;gap:16px}
+  .grid.n2{grid-template-columns:repeat(2,1fr)}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px 22px 20px;
+    display:flex;flex-direction:column}
+  .card.lead-pick{border-color:var(--jade);box-shadow:0 0 0 1px var(--jade),0 10px 30px -18px rgba(11,107,91,.5)}
+  .card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:8px}
+  .card .idx{font-family:var(--font-mono);font-size:12px;color:var(--jade);font-weight:600;letter-spacing:.04em}
+  .card h3.cardttl{font-family:var(--font-display);font-weight:800;font-size:18.5px;letter-spacing:-0.01em;
+    margin:0 0 4px;line-height:1.25}
+  .card .target{font-size:13px;color:var(--ink-3);margin-bottom:13px}
+  .card .why{font-size:14.5px;color:var(--ink-2);margin:0 0 14px}
+  .card .meta{border-top:1px solid var(--line-soft);padding-top:12px;margin-top:auto;display:grid;gap:7px}
+  .meta-row{display:grid;grid-template-columns:54px 1fr;gap:10px;font-size:13px;align-items:baseline}
+  .meta-row .ml{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;
+    color:var(--ink-3);padding-top:1px}
+  .meta-row .mv{color:var(--ink-2)}
+  .meta-row .mv b{color:var(--ink);font-weight:600}
+  .pickflag{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:10px;
+    font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:var(--jade);
+    padding:3px 9px;border-radius:100px}
+
+  /* ---------- tables ---------- */
+  .tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:13px;background:var(--surface);margin:6px 0 8px}
+  table{border-collapse:collapse;width:100%;min-width:640px;font-size:13.5px}
+  thead th{
+    background:var(--surface-2);text-align:left;font-family:var(--font-mono);
+    font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-2);font-weight:600;
+    padding:12px 14px;border-bottom:1px solid var(--line);white-space:nowrap;
+  }
+  tbody td{padding:12px 14px;border-bottom:1px solid var(--line-soft);color:var(--ink-2);vertical-align:top}
+  tbody tr:last-child td{border-bottom:none}
+  tbody td:first-child{color:var(--ink);font-weight:600}
+  td .fee{font-family:var(--font-mono);font-weight:600;color:var(--coral-deep)}
+  td .fee.lo{color:var(--jade-deep)}
+  .stars{font-family:var(--font-mono);letter-spacing:1px;color:var(--jade);font-size:13px}
+  .stars .off{color:var(--line)}
+  tr.hi td{background:var(--jade-tint-2)}
+  td .gatecell{font-family:var(--font-mono);font-size:12px;color:var(--coral-deep);font-weight:600}
+
+  /* ---------- adopt / fix two col ---------- */
+  .duo{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px}
+  .panel{border-radius:14px;padding:20px 20px 12px;border:1px solid var(--line)}
+  .panel.adopt{background:var(--jade-tint-2);border-color:var(--jade-tint)}
+  .panel.fix{background:var(--coral-tint);border-color:#EBC9BF}
+  .panel .p-head{display:flex;align-items:center;gap:9px;font-family:var(--font-display);font-weight:800;
+    font-size:16px;margin-bottom:6px;letter-spacing:-0.01em}
+  .panel.adopt .p-head{color:var(--jade-deep)}
+  .panel.fix .p-head{color:var(--coral-deep)}
+  .panel .p-sub{font-size:12.5px;color:var(--ink-3);margin:0 0 14px}
+  .itm{padding:11px 0;border-top:1px solid rgba(19,32,27,.08)}
+  .itm:first-of-type{border-top:none}
+  .itm .it-t{font-weight:600;color:var(--ink);font-size:14px;margin-bottom:2px}
+  .itm .it-d{font-size:13px;color:var(--ink-2);line-height:1.55}
+  .itm .it-d b{color:var(--ink);font-weight:600}
+
+  /* ---------- flow / sequence ---------- */
+  .flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:8px;margin:14px 0}
+  .flow .step{background:var(--surface);border:1px solid var(--line);border-radius:10px;
+    padding:11px 14px;font-size:13px;color:var(--ink);display:flex;align-items:center;gap:8px;flex:1 1 0;min-width:150px}
+  .flow .step .sn{font-family:var(--font-mono);font-size:11px;color:var(--jade);font-weight:600}
+  .flow .step.last{border-color:var(--jade);background:var(--jade-tint-2)}
+  .flow .arrow{align-self:center;color:var(--ink-3);font-size:13px}
+
+  /* ---------- timeline (weeks) ---------- */
+  .tl{position:relative;margin-top:10px;padding-left:8px}
+  .week{position:relative;padding:0 0 26px 40px}
+  .week::before{content:"";position:absolute;left:11px;top:6px;bottom:-6px;width:2px;background:var(--line)}
+  .week:last-child::before{display:none}
+  .week .dot{position:absolute;left:4px;top:3px;width:16px;height:16px;border-radius:50%;
+    background:var(--surface);border:3px solid var(--jade)}
+  .week.gate .dot{border-color:var(--coral)}
+  .week .wk{font-family:var(--font-mono);font-size:11px;font-weight:600;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--jade);margin-bottom:3px}
+  .week.gate .wk{color:var(--coral-deep)}
+  .week h4{font-family:var(--font-display);font-weight:800;font-size:17px;margin:0 0 6px;letter-spacing:-0.01em}
+  .week .wbody{font-size:14px;color:var(--ink-2)}
+  .week .wbody p{margin:0 0 10px}
+  .pass{background:var(--surface);border:1px solid var(--line-soft);border-left:3px solid var(--jade);
+    border-radius:0 9px 9px 0;padding:11px 14px;margin-top:4px}
+  .pass .pt{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--jade-deep);font-weight:600;margin-bottom:5px}
+  .pass ul{margin:0;padding-left:17px}
+  .pass li{font-size:13px;color:var(--ink-2);margin-bottom:3px}
+  .pass li b{color:var(--ink);font-weight:600}
+  .pass.gatepass{border-left-color:var(--coral)}
+  .pass.gatepass .pt{color:var(--coral-deep)}
+
+  /* ---------- checklist ---------- */
+  .ck{display:grid;gap:9px;margin:8px 0}
+  .ck-row{display:grid;grid-template-columns:22px 1fr;gap:11px;background:var(--surface);
+    border:1px solid var(--line-soft);border-radius:10px;padding:13px 15px}
+  .ck-box{width:16px;height:16px;border:2px solid var(--jade);border-radius:4px;margin-top:3px}
+  .ck-row .ct{font-weight:600;color:var(--ink);font-size:14.5px;margin-bottom:2px}
+  .ck-row .cd{font-size:13px;color:var(--ink-2);line-height:1.55}
+  .ck-row .cd b{color:var(--ink);font-weight:600}
+  .ck-row .cd .mono{font-family:var(--font-mono);font-size:12px;color:var(--jade-deep);font-weight:600}
+
+  .costbox{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);
+    border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:14px}
+  .costcell{background:var(--surface);padding:16px 18px}
+  .costcell .cc-l{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--ink-3);margin-bottom:7px}
+  .costcell .cc-v{font-family:var(--font-mono);font-weight:600;color:var(--jade-deep);font-size:18px;letter-spacing:-0.01em}
+  .costcell .cc-n{font-size:12px;color:var(--ink-2);margin-top:5px}
+
+  /* ---------- defense cards ---------- */
+  .defense{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:8px}
+  .def{background:var(--surface);border:1px solid var(--line);border-radius:13px;padding:18px}
+  .def .dn{font-family:var(--font-mono);font-size:12px;color:var(--jade);font-weight:600;margin-bottom:7px}
+  .def h4{font-family:var(--font-display);font-weight:800;font-size:15.5px;margin:0 0 6px;letter-spacing:-0.01em}
+  .def p{font-size:13px;color:var(--ink-2);margin:0;line-height:1.55}
+
+  /* ---------- footer ---------- */
+  .foot{border-top:1px solid var(--line);margin-top:46px;background:var(--paper-band)}
+  .foot-inner{max-width:var(--wrap);margin:0 auto;padding:30px 28px 42px}
+  .foot .fline{font-family:var(--font-display);font-weight:800;font-size:clamp(18px,2.6vw,24px);
+    letter-spacing:-0.01em;color:var(--ink);max-width:40ch;margin:0 0 14px;line-height:1.3}
+  .foot .fline .hl{color:var(--jade)}
+  .foot .fmeta{font-family:var(--font-mono);font-size:11px;color:var(--ink-3);letter-spacing:.02em;line-height:1.8}
+  .src-note{font-family:var(--font-mono);font-size:11px;color:var(--ink-3);margin-top:18px;line-height:1.7;
+    border-top:1px solid var(--line-soft);padding-top:14px}
+
+  /* ---------- focus + reveal ---------- */
+  a:focus-visible,.navlinks a:focus-visible{outline:2px solid var(--jade);outline-offset:2px;border-radius:4px}
+  .rev{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}
+  .rev.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){.rev{opacity:1;transform:none;transition:none}}
+
+  /* ---------- responsive ---------- */
+  @media (max-width:840px){
+    .stats{grid-template-columns:1fr}
+    .grid.n2{grid-template-columns:1fr}
+    .duo{grid-template-columns:1fr}
+    .costbox{grid-template-columns:1fr}
+    .defense{grid-template-columns:1fr}
+    .navlinks{display:none}
+  }
+  @media (max-width:520px){
+    body{font-size:16px}
+    .wrap,.hero-inner,.topbar-inner,.foot-inner{padding-left:18px;padding-right:18px}
+    .flow .arrow{display:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <span class="brand">1인 K-뷰티 · 전략 도시에</span>
+    <nav class="navlinks" aria-label="섹션">
+      <a href="#market">00 진단</a>
+      <a href="#niche">01 틈새</a>
+      <a href="#channel">02 채널</a>
+      <a href="#trust">03 신뢰</a>
+      <a href="#legal">04 관문</a>
+      <a href="#synthesis">05 통합</a>
+      <a href="#case">06 케이스</a>
+    </nav>
+  </div>
+  <div class="progress"><div class="progress-bar" id="pbar"></div></div>
+</div>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-inner">
+    <span class="eyebrow">Operator's Dossier · 빠른 실행형 1인 빌더용</span>
+    <h1 class="h1">‘제품 만들기’는<br>이미 끝난 게임이다.</h1>
+    <p class="hero-sub">한국 ODM이 세계 최고라, 누구나 좋은 제품을 낼 수 있게 됐다. 그래서 해자는 전부 <strong>유통·신뢰·규제 통과</strong>로 옮겨갔다. 이 문서는 그 전장에서 작게 시작해 검증하고 확장하는 1인 전략을, 두 분석을 비판적으로 합쳐 정리한 것이다.</p>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="num">4,226<span class="u">건</span></div>
+        <div class="lbl"><b>2024년 신규 화장품책임판매업</b> — 2021년의 2배 이상. 진입장벽이 사라진 레드오션의 증거.</div>
+      </div>
+      <div class="stat">
+        <div class="num">85<span class="u">%</span></div>
+        <div class="lbl"><b>올리브영 스킨케어 상위 100개</b>가 ‘진정’ 소구(2024 하반기). 가장 포화된 칸의 정의.</div>
+      </div>
+      <div class="stat">
+        <div class="num">~55<span class="u">%</span></div>
+        <div class="lbl"><b>올리브영 오프라인 실질 수수료.</b> 입점은 출발점이 아니라 ‘졸업장’이어야 하는 이유.</div>
+      </div>
+    </div>
+
+    <div class="keybar">
+      <span class="k-tag">이 문서의 핵심 명제</span>
+      <span class="k-line">수요 검증 <span class="neq">≠</span> 경쟁 <span class="yes">승산</span></span>
+    </div>
+  </div>
+</header>
+
+<!-- 00 진단 -->
+<section class="sec" id="market">
+  <div class="wrap">
+    <div class="sec-head rev">
+      <span class="eyebrow">00 / 시장 진단</span>
+      <h2 class="h2">싸움터가 바뀌었다</h2>
+      <p class="lead">제품력은 입장권이지 차별점이 아니다. 1인 빌더의 승부처는 “더 좋은 성분”이 아니라, 대형 브랜드가 너무 작거나 불편해서 못 먹는 <b>구체적 상황을 먼저 점유</b>하고, 구매자가 믿을 증거를 가장 빨리 쌓는 것이다.</p>
+    </div>
+    <div class="rev">
+      <div class="callout insight">
+        <div class="c-head">왜 지금 1인인가</div>
+        <p>ODM이 “세련된 감각과 마케팅 아이디어만 있으면 진입”할 수 있게 장벽을 허물었고, 인디 브랜드가 K-뷰티 수출의 무게중심이 됐다. 영업이익률 20%대에 전년比 50%+ 성장하는 인디가 다수다. 문제는 — 같은 문이 열려서 <b>수천 명이 동시에 같은 빈칸을 찌르고 있다</b>는 것. 그래서 “어디를 파느냐”와 “얼마나 빨리 신뢰를 쌓느냐”가 전부다.</p>
+      </div>
+      <p class="src">출처 · 식약처 의약품안전나라 / 청년일보(2024 책임판매업 4,226건) · 삼일PwC · 공정거래위원회 2024 유통거래 실태조사</p>
+    </div>
+  </div>
+</section>
+
+<!-- 01 틈새 -->
+<section class="sec" id="niche">
+  <div class="wrap">
+    <div class="sec-head rev">
+      <span class="eyebrow">01 / 틈새 지도</span>
+      <h2 class="h2">대형사가 안 건드리는 5칸</h2>
+      <p class="lead">대형사는 “이미 큰 시장”만 본다. ① 언어가 안 잡힌 인구집단 ② 경계가 무너지는 카테고리 ③ 규모는 작아도 충성·재구매가 강한 맥락 — 여기가 1인의 자리다. 목표는 카테고리 1등이 아니라 <b>한 문장으로 떠오르는 1등</b>.</p>
+    </div>
+
+    <div class="grid n2 rev">
+      <!-- 1 -->
+      <div class="card lead-pick">
+        <div class="card-top">
+          <span class="idx">01 · 인구집단</span>
+          <span class="pickflag">▲ 1순위 추천</span>
+        </div>
+        <h3 class="cardttl">갱년기·페리메노포즈 피부</h3>
+        <div class="target">45~58세 여성 + 부모 화장품을 사는 30대 자녀</div>
+        <p class="why">안티에이징은 포화지만 “호르몬 변화로 무너지는 피부”를 정면으로 파는 브랜드는 사실상 없다. 저속노화 트렌드조차 ‘2030 버전’으로 흘러 <b>실제 갱년기 연령대는 비어 있다.</b></p>
+        <div class="meta">
+          <div class="meta-row"><span class="ml">근거</span><span class="mv">구매력 최상위층 · 전용 브랜드 부재(WGSN이 꼽은 건 호주 ‘렛츠 비 프랭크’ 하나) · 고령화</span></div>
+          <div class="meta-row"><span class="ml">첫 SKU</span><span class="mv"><b>세안 후 당김용 고보습 장벽 크림</b> (비기능성)</span></div>
+          <div class="meta-row"><span class="ml">채널</span><span class="mv">네이버 검색·블로그 + 카톡 선물하기(딸→엄마)</span></div>
+        </div>
+      </div>
+      <!-- 2 -->
+      <div class="card">
+        <div class="card-top"><span class="idx">02 · 인구집단</span></div>
+        <h3 class="cardttl">남성 ‘기능 정밀화’</h3>
+        <div class="target">20~39세 남성 · 그루밍을 넘어 한 고민에 집중</div>
+        <p class="why">대형사는 “올인원 1종”에 머문다. 데이터는 세분화를 가리킨다. “면도 후 장벽 1종”, “초기 두피 신호 세럼”처럼 고민을 좁힌 미니멀 기능이 빈틈.</p>
+        <div class="meta">
+          <div class="meta-row"><span class="ml">근거</span><span class="mv">남성 세럼 CAGR <b>11.84%</b> · 핀터레스트 남성 페이셜 검색 <b>+230%</b> · 국내 남성시장 1.2조(2024)</span></div>
+          <div class="meta-row"><span class="ml">첫 SKU</span><span class="mv">면도 후 장벽 회복 1종</span></div>
+          <div class="meta-row"><span class="ml">채널</span><span class="mv">쿠팡 · 유튜브 쇼츠(튜토리얼형)</span></div>
+        </div>
+      </div>
+      <!-- 3 -->
+      <div class="card">
+        <div class="card-top"><span class="idx">03 · 카테고리</span></div>
+        <h3 class="cardttl">두피의 ‘스킨케어화’</h3>
+        <div class="target">두피를 ‘피부’로 보는 진정·장벽 케어 수요</div>
+        <p class="why">헤어케어가 세정을 넘어 피부처럼 관리되는 영역으로 재편 중. 대형사가 샴푸에 머무는 동안 “두피 앰플/부스터”를 스킨케어 문법으로 파는 자리가 빈다.</p>
+        <div class="meta">
+          <div class="meta-row"><span class="ml">근거</span><span class="mv">WGSN ‘두피 시장 스킨케어 수준 고도화’ · 화해 헤어·두피 확장</span></div>
+          <div class="meta-row"><span class="ml">주의</span><span class="mv"><b>탈모 표방 → 기능성/의약외품</b>. 진정·각질·장벽만 소구</span></div>
+          <div class="meta-row"><span class="ml">채널</span><span class="mv">자사몰 + 콘텐츠</span></div>
+        </div>
+      </div>
+      <!-- 4 -->
+      <div class="card">
+        <div class="card-top"><span class="idx">04 · 피부고민</span></div>
+        <h3 class="cardttl">초민감·장벽손상 ‘과학 검증 진정’</h3>
+        <div class="target">시카·어성초 다음 단계의 신뢰 기반 진정</div>
+        <p class="why">진정은 레드오션이지만 “임상·과학적으로 검증된 진정”은 이제 열린다. 인디 톤으로 성분 근거를 끝까지 공개하는 자리가 남아 있다.</p>
+        <div class="meta">
+          <div class="meta-row"><span class="ml">근거</span><span class="mv">화해 2026 ‘안심 진정(HOCl)’ 트렌드 · 로레알의 고운세상(닥터지) 인수 = 더모 검증</span></div>
+          <div class="meta-row"><span class="ml">맥락</span><span class="mv">식약처 금지성분 <b>1,040개</b>로 확대 — 효능 과장 무관용, 증거가 곧 무기</span></div>
+          <div class="meta-row"><span class="ml">채널</span><span class="mv">화해 · 네이버 검색</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid rev" style="margin-top:16px">
+      <!-- 5 -->
+      <div class="card">
+        <div class="card-top"><span class="idx">05 · 사용맥락 · 인구 결합</span></div>
+        <h3 class="cardttl">임산부·수유부 ‘안심 스킨케어’</h3>
+        <div class="target">“이 성분 임신 중 써도 되나”라는 불안을 큐레이션</div>
+        <p class="why">강력한 구매 동인인데 정면으로 보증하는 브랜드가 드물다. 한 번 신뢰를 얻으면 1~2년 강한 락인이 걸린다. 정밀 부위(눈밑·목·손)와 묶으면 더 좁힐 수 있다.</p>
+        <div class="meta">
+          <div class="meta-row"><span class="ml">근거</span><span class="mv">클린·안심 트렌드와 결합도 최상 · 높은 재구매·추천 LTV</span></div>
+          <div class="meta-row"><span class="ml">주의</span><span class="mv"><b>효능 표방·의약품 오인 광고 리스크</b> 관리 필수(성분 안전성 ‘큐레이션’으로만)</span></div>
+          <div class="meta-row"><span class="ml">채널</span><span class="mv">자사몰 · 맘카페 · 마이크로 인플루언서</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 채널 -->
+<section class="sec" id="channel">
+  <div class="wrap">
+    <div class="sec-head rev">
+      <span class="eyebrow">02 / 유통 채널 승산</span>
+      <h2 class="h2">수수료가 전부를 가른다</h2>
+      <p class="lead">공정위 2024 실태조사 기준 화장품 판매수수료율은 평균 40%로 전 업종 1위. 채널별 실질 부담은 아래와 같다. 신규 1인에게 올리브영은 환상 — 신뢰의 상징성 때문이지 수익 때문이 아니다.</p>
+    </div>
+
+    <div class="tablewrap rev">
+      <table>
+        <thead>
+          <tr><th>채널</th><th>진입 난이도</th><th>실질 수수료 / 마진</th><th>1인 적합</th><th>핵심 리스크</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>올리브영 (오프라인)</td>
+            <td>매우 높음<br><span class="src">MD상담→품평회→신용평가→계약</span></td>
+            <td><span class="fee">~54.74%</span><br><span class="src">판매40 + 판촉4.75 + 장려6.94 + 정보~3</span></td>
+            <td><span class="stars">★<span class="off">★★★★</span></span></td>
+            <td>신규는 ‘별 따기’ · 벤더 추가 마진 · 많이 팔수록 손해</td>
+          </tr>
+          <tr>
+            <td>올리브영 (온라인몰)</td>
+            <td>높음</td>
+            <td><span class="fee">~44%↑</span><br><span class="src">온라인몰 29.36 + 부대비용</span></td>
+            <td><span class="stars">★★<span class="off">★★★</span></span></td>
+            <td>오프라인 없이 단품 입점은 효과 제한</td>
+          </tr>
+          <tr>
+            <td>쿠팡</td>
+            <td>낮음~중간</td>
+            <td><span class="fee">25.8%</span> + 광고3.78 + 판촉5.76</td>
+            <td><span class="stars">★★★<span class="off">★★</span></span></td>
+            <td>가격·리뷰 싸움 · 브랜드 자산 안 쌓임</td>
+          </tr>
+          <tr class="hi">
+            <td>스마트스토어</td>
+            <td>매우 낮음<br><span class="src">즉시 개설</span></td>
+            <td><span class="fee lo">~3–6%</span><br><span class="src">주문관리 1.98~3.63 + 판매 0.91~2.73</span></td>
+            <td><span class="stars">★★★★★</span></td>
+            <td>트래픽을 직접 만들어야 함</td>
+          </tr>
+          <tr class="hi">
+            <td>자사몰 + 콘텐츠</td>
+            <td>개설 낮음 / 트래픽 높음</td>
+            <td><span class="fee lo">0%</span> <span class="src">(PG ~3–4%만)</span></td>
+            <td><span class="stars">★★★★<span class="off">★</span></span></td>
+            <td>초기 매출 느림 · CAC 부담</td>
+          </tr>
+          <tr>
+            <td>공동구매 · 인플루언서</td>
+            <td>섭외 중간~높음</td>
+            <td>변수 <span class="src">(매출의 20~40%대 정산)</span></td>
+            <td><span class="stars">★★★★<span class="off">★</span></span></td>
+            <td>1회성·휘발 · CS 폭주 · 인플루언서 의존</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="src rev">출처 · 공정위 2024 유통거래 실태조사 / 딜사이트·비즈한국(올리브영) / 네이버 스마트스토어 2025.6 개편 공지</p>
+
+    <h3 class="h3 rev">1인 빌더 권장 시퀀스</h3>
+    <div class="flow rev">
+      <div class="step"><span class="sn">1</span> 스마트스토어·자사몰로 검증·마진 확보</div>
+      <span class="arrow">→</span>
+      <div class="step"><span class="sn">2</span> 인플루언서 공구로 폭발 트리거</div>
+      <span class="arrow">→</span>
+      <div class="step"><span class="sn">3</span> 화해·리뷰로 신뢰 축적</div>
+      <span class="arrow">→</span>
+      <div class="step last"><span class="sn">4</span> 데이터를 무기로 올리브영 협상</div>
+    </div>
+    <p class="rev muted" style="font-size:14.5px">실제 K-뷰티 인디의 <b>‘SNS → 검증 채널 → 오프라인’</b> 단계 공식과 같다. 올리브영을 출발점이 아니라 졸업장으로 둔다.</p>
+  </div>
+</section>
+
+<!-- 03 신뢰 -->
+<section class="sec" id="trust">
+  <div class="wrap">
+    <div class="sec-head rev">
+      <span class="eyebrow">03 / 브랜드 · 신뢰</span>
+      <h2 class="h2">무명이 ‘믿고 사는’ 신뢰를<br>빠르게 만든 법</h2>
+      <p class="lead">자본 없이 신뢰를 만드는 핵심은 자기 주장이 아니라 제3자 검증과 투명성이다. 국내 신뢰 인프라의 중심은 <b>화해</b>다.</p>
+    </div>
+
+    <div class="grid n2 rev">
+      <div class="card">
+        <h3 class="cardttl">① 화해 — “검증받는 용기”</h3>
+        <p class="why">출시 직후 화해 등록 → 꼼꼼 평가단(꼼평단)으로 고관여 리뷰 확보 → 어워드·평점을 상세페이지·광고의 신뢰 배지로 재활용. 헤어케어 ‘리필드’가 꼼평단 검증으로 <b>2025 화해 어워드 3관왕</b>을 달성한 동선을 그대로 복제 가능. (3,000+ 브랜드가 활용)</p>
+      </div>
+      <div class="card">
+        <h3 class="cardttl">② 단일 히어로 + 성분 스토리</h3>
+        <p class="why">한 고민에 한 성분, 전 성분 투명 공개. 라운드랩 <b>독도토너</b>(속건조), 스킨1004 센텔라 앰플(530만 개), 아누아 어성초 토너(아마존 5배), 토리든 다이브인(1,361만 개), 달바 ‘승무원 미스트’. 라인업보다 첫 히어로 SKU 하나에 증거를 집중한다.</p>
+      </div>
+      <div class="card">
+        <h3 class="cardttl">③ 인플루언서 1명이 방아쇠</h3>
+        <p class="why">조선미녀는 틱톡커 한 명의 선크림 리뷰 영상 <b>하나로</b> 미국 인지도를 확보, 이후 틱톡 선크림 상위 20개 중 16개를 장악했다. 거대 예산이 아니라 “광고처럼 안 보이는 콘텐츠”가 알고리즘을 타게 하는 게 핵심.</p>
+      </div>
+      <div class="card">
+        <h3 class="cardttl">④ 썸네일이 클릭률을 가른다</h3>
+        <p class="why">스킨1004 리브랜딩을 이끈 티몬 출신 총괄의 교훈: 같은 제품도 ‘썸네일이 어떤 기분을 자아내느냐’가 매출을 열 배 가른다. 제형 1mL보다 <b>썸네일 1장에 더 투자</b>한다.</p>
+      </div>
+    </div>
+
+    <div class="callout insight rev">
+      <div class="c-head">1인용 신뢰 공식 · 90일</div>
+      <p>히어로 1종 + 성분 1개 스토리 → 전 성분·근거 끝까지 공개 → 화해 등록 + 꼼평단 → 마이크로 인플루언서(1~10만) 5~10명 진정성 시딩 → <b>그중 1명이라도 터지면 그 콘텐츠를 광고 소재로 증폭.</b> 여기에 “맞는 사람 / 안 맞는 사람” 명시와 “실패 기록 공개”를 얹으면 공신력이 배가된다.</p>
+    </div>
+    <p class="src rev">출처 · 화해 비즈니스 · 롱블랙(스킨1004) · 싱클리·Business of Fashion(조선미녀) · 코스인</p>
+  </div>
+</section>
+
+<!-- 04 관문 -->
+<section class="sec" id="legal">
+  <div class="wrap">
+    <div class="sec-head rev">
+      <span class="eyebrow">04 / 현실 체크리스트</span>
+      <h2 class="h2">법적 관문, 1인 최단 경로</h2>
+      <p class="lead">ODM 위탁생산이면 제조업 등록은 불필요(제조 라이선스는 ODM사 보유). <b>화장품책임판매업</b> 하나만 등록하면 된다. 핵심은 — 법적 장벽이 거의 없다는 것. 그래서 레드오션이고, 진짜 비용은 등록비가 아니라 MOQ·재고·CAC다.</p>
+    </div>
+
+    <div class="ck rev">
+      <div class="ck-row"><div class="ck-box"></div><div>
+        <div class="ct">사업자등록 + 통신판매업 신고</div>
+        <div class="cd">개인사업자로 충분. 소재지는 <b>자택·오피스텔·공유오피스 가능</b>(사무용도 임대차계약서, 일부 현장실사). <span class="mono">1~3일</span></div>
+      </div></div>
+      <div class="ck-row"><div class="ck-box"></div><div>
+        <div class="ct">책임판매관리자 선임 — 비용을 가르는 핵심</div>
+        <div class="cd">자격: 의사·약사 또는 이공계·향장학·화장품과학·간호학 등 학사 이상. <b>상시 10인 이하면 대표가 자격 충족 시 겸임 가능 → 인건비 0원.</b> 없으면 자격자 선임 또는 관리자 풀 제공 대행 활용.</div>
+      </div></div>
+      <div class="ck-row"><div class="ck-box"></div><div>
+        <div class="ct">품질관리 + 책임판매 후 안전관리 매뉴얼</div>
+        <div class="cd">대한화장품협회 표준 양식을 본인 유통·보관 환경에 맞게 수정해 제출.</div>
+      </div></div>
+      <div class="ck-row"><div class="ck-box"></div><div>
+        <div class="ct">품질검사 위수탁 계약</div>
+        <div class="cd">직접 검사 안 하면 공인시험기관과 위탁계약. <span class="mono">제품·항목당 수십만 원</span></div>
+      </div></div>
+      <div class="ck-row"><div class="ck-box"></div><div>
+        <div class="ct">의약품안전나라 온라인 등록</div>
+        <div class="cd">전자민원 수수료 <span class="mono">27,000원</span>, 처리 <span class="mono">약 7~10영업일</span>. 별도로 등록면허세(위택스 자진신고, 수만 원).</div>
+      </div></div>
+      <div class="ck-row"><div class="ck-box"></div><div>
+        <div class="ct">등록 후 의무</div>
+        <div class="cd">책임판매관리자 최초 6개월 내 교육 + 매년 1회. 생산실적은 다음 해 2월 말까지 대한화장품협회 보고(실적 없어도 ‘없음’ 보고, 미보고 시 과태료 50만원).</div>
+      </div></div>
+    </div>
+
+    <div class="costbox rev">
+      <div class="costcell"><div class="cc-l">등록 직접비</div><div class="cc-v">6만~10만 원</div><div class="cc-n">수수료 + 면허세 + 증명서</div></div>
+      <div class="costcell"><div class="cc-l">품질검사</div><div class="cc-v">30~100만 원</div><div class="cc-n">제품당 · 항목 수에 따라</div></div>
+      <div class="costcell"><div class="cc-l">소요 기간</div><div class="cc-v">2~4주</div><div class="cc-n">서류 완비 시 · 관리자 본인 겸임이면 인건비 0</div></div>
+    </div>
+    <p class="src rev">출처 · 화장품법·시행규칙 / 의약품안전나라 / 서울·경인지방식약청 안내 / 대한화장품협회</p>
+  </div>
+</section>
+
+<!-- 05 통합 -->
+<section class="sec" id="synthesis">
+  <div class="wrap">
+    <div class="sec-head rev">
+      <span class="eyebrow">05 / 두 분석의 비판적 통합</span>
+      <h2 class="h2">실행은 가져오고,<br>표적 선정은 고친다</h2>
+      <p class="lead">검토한 다른 분석은 ‘실행 플레이북’으로는 탁월했지만 ‘기회 검증’으로는 비어 있었다. 빠른 실행형에게 정확히 위험한 조합 — 잘못된 칸에서 완벽하게 실행할 위험. 채택할 것과 교정할 것을 분리한다.</p>
+    </div>
+
+    <div class="callout risk rev">
+      <div class="c-head">로드베어링 비판</div>
+      <p><b>수요 검증 ≠ 경쟁 승산.</b> 댓글에 “이거 언제 나와요?”가 100개 와도, 그 칸을 코스알엑스·아누아가 이미 장악했으면 가격·리뷰·유통에서 깔린다. 그 문서는 “콘텐츠 반응이 빨라서” <b>가장 포화된 진정/장벽(상위 100개의 85%)을 1순위</b>로 골랐다 — 테스트하기 쉬운 것과 이기기 쉬운 것을 혼동한 것.</p>
+    </div>
+
+    <div class="duo rev">
+      <div class="panel adopt">
+        <div class="p-head"><span class="chip adopt">채택</span> 그대로 흡수</div>
+        <p class="p-sub">실행 플레이북으로서 더 날카로운 부분</p>
+        <div class="itm"><div class="it-t">상황 카테고리 네이밍</div><div class="it-d">“오후 2시 리셋 패드 &gt; 장벽 세럼”. 실제 승자(독도토너·승무원 미스트)가 쓴 문법.</div></div>
+        <div class="itm"><div class="it-t">맞는 사람 / 안 맞는 사람</div><div class="it-d">‘안 맞는 사람’을 명시하는 게 역설적으로 공신력을 만든다.</div></div>
+        <div class="itm"><div class="it-t">실패 기록 공개(빌드 인 퍼블릭)</div><div class="it-d">자본 없이 신뢰를 쌓는 1인 최적 전술.</div></div>
+        <div class="itm"><div class="it-t">후기 조건 구체화 + ODM 품질문서 체크리스트</div><div class="it-d">“수부지 31세, 오후 번들거림”까지. <b>통신판매업 신고</b> 등 관문도 더 꼼꼼.</div></div>
+      </div>
+      <div class="panel fix">
+        <div class="p-head"><span class="chip fix">교정</span> 고쳐서 쓸 것</div>
+        <p class="p-sub">그대로 따르면 비싸게 물리는 함정</p>
+        <div class="itm"><div class="it-t">데이터가 0</div><div class="it-d">모든 “왜 빈틈인가”가 주장. 진짜 빈틈과 ‘비어서 비어 있는’ 빈틈을 구분 못 함.</div></div>
+        <div class="itm"><div class="it-t">MVP가 자기 규제 원칙과 모순</div><div class="it-d">“비기능성 기초 1 SKU”라면서 컬러 코렉터·톤업(색조 / SPF·미백 시 <b>기능성</b>)을 제안.</div></div>
+        <div class="itm"><div class="it-t">임계치에 분모가 없다</div><div class="it-d">“전환율 5%”는 방문 20명의 5%(1명)와 2,000명의 5%(100명)가 같은 줄에.</div></div>
+        <div class="itm"><div class="it-t">채널에 숫자가 없고, 빈틈 닫히는 속도 무시</div><div class="it-d">‘원가 4~5배’가 올리브영 ~55%와 안 맞음. 4,226건이 동시에 같은 칸을 찌르는데 방어 전략 없음.</div></div>
+      </div>
+    </div>
+
+    <h3 class="h3 rev">합치는 법 — 세 가지만 바꾼다</h3>
+    <div class="grid rev">
+      <div class="card">
+        <div class="meta" style="border:none;padding:0;margin:0">
+          <div class="meta-row"><span class="ml">01</span><span class="mv"><b>레이어 이원화.</b> 상황 네이밍은 브랜딩·콘텐츠에만. 발견(검색·SEO)은 카테고리 키워드로 — 사람들은 ‘피지 패드’를 검색하지 ‘오후 2시 리셋’을 검색하지 않는다.</span></div>
+          <div class="meta-row"><span class="ml">02</span><span class="mv"><b>경쟁 승산 게이트.</b> 4주 검증 Week 1에 “1페이지 대형 브랜드 수·리뷰 격차”를 측정 항목으로 추가. 격차 100:1 넘으면 수요가 좋아도 No-Go.</span></div>
+          <div class="meta-row"><span class="ml">03</span><span class="mv"><b>첫 SKU는 진짜 비기능성 기초.</b> 색조·SPF·미백은 검증 통과 후 2차로. 그래야 빠르고 싼 1인 경로와 맞는다.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 06 케이스 -->
+<section class="sec" id="case">
+  <div class="wrap">
+    <div class="sec-head rev">
+      <span class="eyebrow">06 / 적용 케이스 · 갱년기</span>
+      <h2 class="h2">통합 4주 검증안</h2>
+      <p class="lead">그 문서의 4주 프레임 + <b>경쟁 승산 게이트</b> + 갱년기 맞춤 채널 적응. <span class="chip soft">NEW = 문서 대비 추가·교정</span></p>
+    </div>
+
+    <div class="callout insight rev">
+      <div class="c-head">왜 갱년기인가 (데이터 확인)</div>
+      <p>저밀도 확인됨 — WGSN이 갱년기 전용으로 꼽은 건 해외 브랜드 하나뿐, 국내엔 ‘갱년기’를 정면에 건 브랜드가 사실상 없다. 반면 진정/장벽은 <b>상위 100개의 85%</b>가 같은 걸 판다. 게다가 갱년기 층은 <b>구매력이 높아</b> 객단가를 올려도 이탈이 적다 = 채널 수수료를 흡수할 마진 여유.</p>
+    </div>
+
+    <div class="tl rev">
+      <div class="week">
+        <span class="dot"></span>
+        <div class="wk">Week 1</div>
+        <h4>컨셉 좁히기 + 리뷰 마이닝 + 경쟁 승산 측정 <span class="chip gate">NEW · 게이트</span></h4>
+        <div class="wbody">
+          <p>채널별 리뷰 100개씩 수집·분류(불만/사용맥락/피부타입/구매언어). 갱년기는 수집처가 다르다 — 올리브영·네이버쇼핑 + <b>블로그/카페 + 맘카페(30대 딸 구매층)</b>.</p>
+          <p class="muted" style="font-size:13.5px">추가 측정: 타깃 키워드(“갱년기 크림”, “세안 후 당김”, “엄마 화장품 선물”)로 1페이지 대형 브랜드 수와 리뷰 격차를 센다. 갱년기 = 격차 작음(진입 가능) vs 진정 = 1000:1.</p>
+          <div class="pass gatepass">
+            <div class="pt">통과 기준 (분모 박음)</div>
+            <ul>
+              <li>같은 불만 문장이 <b>리뷰 100개 중 30회+</b> 반복</li>
+              <li><b>경쟁 격차 100:1 미만</b> — 미달 시 무조건 No-Go</li>
+              <li>1문장 포지셔닝 3개 + 헤드라인 10개 확보</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="week">
+        <span class="dot"></span>
+        <div class="wk">Week 2</div>
+        <h4>콘텐츠 반응 — 이중 트랙으로 적응 <span class="chip soft">NEW</span></h4>
+        <div class="wbody">
+          <p>갱년기 연령대는 틱톡에 그 방식으로 없다. 그래서 듀얼 바이어를 노린다.</p>
+          <p><b>트랙 A (50대 본인):</b> 네이버 블로그·유튜브 정보형 검색 콘텐츠. <b>트랙 B (30대 딸):</b> 인스타·쇼츠 “엄마한테 선물한 크림” 앵글. + 맞는/안 맞는 사람, 실패 기록.</p>
+          <div class="pass">
+            <div class="pt">통과 기준</div>
+            <ul>
+              <li>트랙 A: <b>글 5편 합산 구체 질문 15개+</b></li>
+              <li>트랙 B: 평균 대비 저장·공유 2배 콘텐츠 1개+</li>
+              <li>랜딩 알림: <b>유효 방문 200명 기준 전환 5%+ (=10명+)</b></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="week">
+        <span class="dot"></span>
+        <div class="wk">Week 3</div>
+        <h4>구매 직전 행동 + 채널 경제성 연결 <span class="chip soft">NEW</span></h4>
+        <div class="wbody">
+          <p>최적 채널: 검색형(스마트스토어) + 선물형(카톡 선물하기, 딸→엄마). 가격은 <b>29,800~39,800원</b>으로 올려도 구매력 덕에 이탈이 적고, 이게 곧 채널 수수료를 흡수할 마진이 된다(올리브영 ~55%에선 적자, 스마트스토어 ~3~6%에선 흑자).</p>
+          <p class="muted" style="font-size:13.5px">인플루언서도 ‘맞는 사람’으로 — 2030 틱톡커가 아니라 40~50대 주부·라이프스타일 계정.</p>
+          <div class="pass">
+            <div class="pt">통과 기준</div>
+            <ul>
+              <li>인플루언서 답장률 10%+ (30~50명 발송 → 3~5명)</li>
+              <li>베타테스터·사전알림 <b>30명+</b></li>
+              <li>29,800원 구간에서 알림 이탈이 24,800원 대비 급감하지 않음</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="week gate">
+        <span class="dot"></span>
+        <div class="wk">Week 4 · 의사결정</div>
+        <h4>Go / No-Go 점수화 — 경쟁 승산을 게이트로</h4>
+        <div class="wbody">
+          <p>감으로 결정하지 않는다. 문서의 점수표에 <b>경쟁 승산·규제 안전성을 추가하고 분모를 박은</b> 버전.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="tablewrap rev" style="margin-top:6px">
+      <table>
+        <thead><tr><th>기준</th><th>통과선 (분모 명시)</th></tr></thead>
+        <tbody>
+          <tr><td>반복 발견 고객 불만</td><td>리뷰 100개 중 30회 이상</td></tr>
+          <tr class="hi"><td>경쟁 승산 <span class="chip gate" style="margin-left:4px">게이트</span></td><td><span class="gatecell">1페이지 격차 100:1 미만 — 미달 시 무조건 No-Go</span></td></tr>
+          <tr><td>알림 신청</td><td>유효 방문 200명 기준 5%+(10명+) 강함 / 절대수 30명+ 추가검증</td></tr>
+          <tr><td>베타테스터 신청</td><td>30명 이상</td></tr>
+          <tr><td>콘텐츠 반응</td><td>평균 대비 2배 콘텐츠 1개 이상</td></tr>
+          <tr><td>인플루언서 협업 가능성</td><td>긍정 답변 3명 이상</td></tr>
+          <tr><td>객단가 마진</td><td>원가 4~5배 + 목표 채널(스마트스토어·자사몰) 수수료 흡수 가능</td></tr>
+          <tr class="hi"><td>규제 안전성 <span class="chip fix" style="margin-left:4px">NEW</span></td><td>주름개선·미백·SPF 등 기능성·의약품 표현 없이 설명 가능</td></tr>
+          <tr><td>첫 SKU 명확성</td><td>한 문장으로 설명 가능</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="grid rev" style="margin-top:8px">
+      <div class="card">
+        <div class="meta" style="border:none;padding:0;margin:0">
+          <div class="meta-row"><span class="ml">결정</span><span class="mv">게이트 통과 + 나머지 7개 중 <b>5개+</b> → ODM 샘플 착수</span></div>
+          <div class="meta-row"><span class="ml">결정</span><span class="mv">경쟁 승산 미달 → 수요가 아무리 좋아도 <b>폐기</b>, 다음 칸으로</span></div>
+          <div class="meta-row"><span class="ml">결정</span><span class="mv">5~6개 통과 → 타깃·메시지 수정 후 2주 추가</span></div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="h3 rev">방어 — 틈새를 어떻게 지키나 <span class="chip soft">NEW · 문서에 없던 부분</span></h3>
+    <div class="defense rev">
+      <div class="def">
+        <div class="dn">01</div>
+        <h4>페르소나 락인</h4>
+        <p>“갱년기”를 부끄럽지 않게, 따뜻하게 쓰는 첫 브랜드가 되면 그 자체가 검색·구전의 기준점이 된다.</p>
+      </div>
+      <div class="def">
+        <div class="dn">02</div>
+        <h4>재구매 구독</h4>
+        <p>보습 크림은 소모품이라 정기구독·리필이 잘 붙고, 이 연령대는 한 번 정착하면 충성도가 높다.</p>
+      </div>
+      <div class="def">
+        <div class="dn">03</div>
+        <h4>30대 딸 게이트웨이</h4>
+        <p>선물 구매자(딸)를 잡으면 본인+가족으로 LTV 확장. 대형사가 2030 타깃으론 복제하기 어려운 구조.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="foot-inner">
+    <p class="fline">실행은 <span class="hl">이 플레이북</span>, 표적 선정은 <span class="hl">데이터</span>로 — 그렇게 분업시키면 “잘못된 칸에서 완벽하게 실행하는” 위험이 사라진다.</p>
+    <div class="fmeta">
+      1인 K-뷰티 브랜드 전략 도시에 · 빠른 실행형 빌더용<br>
+      다음 단계 후보 — 갱년기 1페이지 실행 체크리스트 / 두피 칸 병렬 적용 비교
+    </div>
+    <div class="src-note">
+      DATA SOURCES · 식약처 의약품안전나라 · 공정거래위원회 2024 유통거래 실태조사 · 청년일보 · 삼일PwC · WGSN(via 화해 비즈니스) · 트렌디어 올리브영 리뷰 분석 · 롱블랙 · 싱클리 · 코스인 · 딜사이트 · 네이버 스마트스토어 공지 · 화장품법/시행규칙. 모든 수치는 2024~2026년 공개 자료 기준이며, 규제·수수료는 변동될 수 있으니 실행 시점에 재확인 권장.
+    </div>
+  </div>
+</footer>
+
+<script>
+  // reading progress
+  var pbar = document.getElementById('pbar');
+  function onScroll(){
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop || document.body.scrollTop) / max * 100 : 0;
+    pbar.style.width = pct + '%';
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+
+  // scroll reveal
+  var prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!prefersReduce && 'IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+    }, {threshold:0.12, rootMargin:'0px 0px -40px 0px'});
+    document.querySelectorAll('.rev').forEach(function(el){ io.observe(el); });
+  } else {
+    document.querySelectorAll('.rev').forEach(function(el){ el.classList.add('in'); });
+  }
+
+  // active nav highlight
+  var links = Array.prototype.slice.call(document.querySelectorAll('.navlinks a'));
+  var secs = links.map(function(a){ return document.querySelector(a.getAttribute('href')); });
+  var navObs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        var id = '#' + e.target.id;
+        links.forEach(function(a){ a.classList.toggle('on', a.getAttribute('href') === id); });
+      }
+    });
+  }, {threshold:0.01, rootMargin:'-45% 0px -50% 0px'});
+  secs.forEach(function(s){ if(s) navObs.observe(s); });
+</script>
+</body>
+</html>
